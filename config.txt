@@ -15,27 +15,35 @@ nmap = map.ndx ; Output index file containing per bead mapping.
 v = bool ; Verbose. Be load and noisy. (Default: False)
 h = bool ;  Display this help. (Default: False)
 ss = dssp ;   Secondary structure (File or string)
+
       -ssc  Cutoff fraction for ss in case of ambiguity (default: 0.5).
      -dssp  DSSP executable for determining structure
+
 collagen = bool ;  Use collagen parameters (Default: False)
 his = bool ;  Interactively set the charge of each His-residue. (Default: False)
 nt = bool ;  Set neutral termini (charged is default)
 cb = bool ; Set charges at chain breaks (neutral is default)
+
       -cys  Disulphide bond (+)
      -link  Link (+)
     -merge  Merge chains: e.g. -merge A,B,C (+)
+
 name = Protein ;  Moleculetype name
 p = None ;  Output position restraints (None/All/Backbone) (default: None)
 pf = 1000 ;  Position restraints force constant (default: 1000 kJ/mol/nm^2)
 ed = bool ; Use dihedrals for extended regions rather than elastic bonds (Default: False)
+
       -sep  Write separate topologies for identical chains.
+
 ff = elnedyn22  ;  Which forcefield to use: martini21 ,martini21p ,martini22 ,martini22p ,elnedyn ,elnedyn22 ,elnedyn22p (Preferred: elnedyn22)
 elastic = bool ;  Write elastic bonds
-       -ef  Elastic bond force constant Fc
+
+       -ef  Elastic bond force constant Fc (default: 500 kJ/mol/nm^2)
        -el  Elastic bond lower cutoff: F = Fc if rij < lo (default: 0.64)
        -eu  Elastic bond upper cutoff: F = 0  if rij > up (default: 0.97)
        -ea  Elastic bond decay factor a (default: 0)
        -ep  Elastic bond decay power p (default: 0)
        -em  Remove elastic bonds with force constant lower than this
        -eb  Comma separated list of bead names for elastic bonds
+       
     -multi  Chain to be set up for multiscaling (+)
