@@ -6,6 +6,7 @@ clean_protein = clean_protein.pdb
 dssp = protein.dssp
 
 ### martinize options ####
+
 f = clean_protein.pdb ; Input file (PDB|GRO)
 o = cg_topol.top ; Output topology (TOP)
 x = cg_protein.gro ; Output coarse grained structure (PDB|GRO)
