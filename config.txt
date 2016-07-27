@@ -37,6 +37,7 @@
 # Set charges at chain breaks (neutral is default)
 ;-cb = False
 
+
 ### chain options ###
 
 # Disulphide bond (+)
@@ -78,6 +79,7 @@
 ;-em =
 # Comma separated list of bead names for elastic bonds
 ;-eb  = []
+
 
 
 ###########################
