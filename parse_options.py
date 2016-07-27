@@ -1,6 +1,3 @@
-import sys, string
-
-
 def parseconfig(filename):
     with open(filename) as fin:
         lines = fin.readlines()
@@ -22,19 +19,21 @@ def parseconfig(filename):
             else:
                 options[t[0]] = t[1]
 
-    #print options
-
-    exclude = ['-protein', '-clean_protein', '-dssp']
+    preprocess = ['-protein']
     option_keys = options.keys()
-    martinize_flags = ''
 
+    martinize_flags = ''
     for key in option_keys:
-        if key in exclude:
+        if key in preprocess:
             pass
         else:
-            martinize_flags = martinize_flags+' '+key+' '+options[key]
+            martinize_flags = martinize_flags + ' ' + key + ' ' + options[key]
 
-    clean_flags = ''
+    preprocess_flags = ''
+    for key in option_keys:
+        if key in preprocess:
+            preprocess_flags = preprocess_flags + ' ' + key + ' ' + options[key]
+        else:
+            pass
 
-    return martinize_flags, clean_flags
-
+    return martinize_flags, preprocess_flags

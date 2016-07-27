@@ -1,100 +1,174 @@
-# Give a PDB file for processing/cleaning
+###########################
+####   Preprocessing   ####
+###########################
+
+# Give a PDB file for processing/cleaning (mandatory)
 -protein = protein.pdb
--clean_protein = clean_protein.pdb
 
-#Output file for DSSP calculation
--dssp = protein.dssp
 
-### martinize options ####
-# Input file (PDB|GRO)
--f = clean_protein.pdb
+###########################
+#### martinize options ####
+###########################
 
-# Output options
+### Forcefield options ###
 
-# Output topology (TOP)
--o = cg_topol.top
-# Output coarse grained structure (PDB|GRO)
--x = cg_protein.gro
-
-# Output index file with CG (and multiscale) beads.
--n = index.ndx
-# Output index file containing per bead mapping.
--nmap = map.ndx
-
-# Verbose. Be load and noisy
--v = False
-# Display this help
--h = False
-
-# Secondary Structure options
-
-# Secondary structure (File or string)
--ss = protein.dssp
-# Cutoff fraction for ss in case of ambiguity (default: 0.5)
--ssc = 0.5
-
-# Use collagen parameters (Default: False)
--collagen = True
-
-# Interactively set the charge of each His-residue. (Default: False)
--his = False
-# Set neutral termini (charged is default)
--nt = True
-# Set charges at chain breaks (neutral is default)
--cb = False
-
-# Disulphide bond (+)
--cys = False
-# link (+)type
--link = False
-
-# Merge chains: e.g. -merge A,B,C (+)
--merge = False
-
-# Moleculetype Name
--name = Protein
-
-# Position restraint options
-
-# Output position restraints (None/All/Backbone) (default: None)
--p = None
-# Position restraints force constant (default: 1000 kJ/mol/nm^2)
--pf = 1000
-
-# Use dihedrals for extended regions rather than elastic bonds (Default: False)
--ed = False
-# Write separate topologies for identical chains
--sep = False
-
-# Forcefield
 # Which forcefield to use: martini21 ,martini21p ,martini22 ,martini22p ,elnedyn ,elnedyn22 ,elnedyn22p (Preferred: elnedyn22)
 -ff = elnedyn22
 
-# Elastic network model
+### Elastic network model ###
 
 # Write elastic bonds
--elastic = False
+-elastic = True
+
+### Secondary Structure options ###
+
+# Cutoff fraction for ss in case of ambiguity (default: 0.5)
+;-ssc = 0.5
+
+# Use collagen parameters (Default: False)
+;-collagen = False
+
+### termini options ###
+
+# Interactively set the charge of each His-residue. (Default: False)
+;-his = False
+# Set neutral termini (charged is default)
+;-nt = False
+# Set charges at chain breaks (neutral is default)
+;-cb = False
+
+### chain options ###
+
+# Disulphide bond (+)
+;-cys = False
+# link (+)type
+;-link = False
+# Merge chains: e.g. -merge A,B,C (+)
+;-merge = False
+# Chain to be set up for multiscaling (+)
+;-multi =
+
+
+### Position restraint options ###
+
+# Output position restraints (None/All/Backbone) (default: None)
+;-p = None
+# Position restraints force constant (default: 1000 kJ/mol/nm^2)
+;-pf = 1000
+
+# Use dihedrals for extended regions rather than elastic bonds (Default: False)
+;-ed = False
+# Write separate topologies for identical chains
+;-sep = False
+
+
+### other elastic network options are chosen True when "-elastic" is used. Uses all default values ###
 
 # Elastic bond force constant Fc (default: 500 kJ/mol/nm^2)
--ef = 500
-
+;-ef = 500
 # Elastic bond lower cutoff: F = Fc if rij < lo
--el = 0.5
-
+;-el = 0.5
 # Elastic bond upper cutoff: F = 0  if rij > up
--eu = 0.9
-
+;-eu = 0.9
 # Elastic bond decay factor a (default: 0)
--ea  = 0
-
+;-ea  = 0
 # Elastic bond decay power p (default: 0)
--ep  = 0
-
+;-ep  = 0
 # Remove elastic bonds with force constant lower than this
-#-em =
-
+;-em =
 # Comma separated list of bead names for elastic bonds
-#-eb  = []
+;-eb  = []
 
-# Chain to be set up for multiscaling (+)
-#-multi =
+
+###########################
+####   insane options  ####
+###########################
+
+###  Periodic boundary conditions  ###
+
+# PBC type: hexagonal, rectangular, square, cubic, optimal or keep
+-pbc = square
+# X dimension or first lattice vector of system (nm)
+-x = 10
+# Y dimension or first lattice vector of system (nm)
+-y = 10
+# Z dimension or first lattice vector of system (nm)
+-z = 10
+# Distance between periodic images (nm)
+;-d = 0
+#  Z distance between periodic images (nm)
+;-dz = 0
+
+
+###  Membrane/lipid related options  ###
+
+# Lipid type and relative abundance (NAME[:#]) (use multiple -l to define different lipid mixtures)
+;-l =
+Lipid type and relative abundance (NAME[:#]) (use multiple -u to define different lipid mixtures)
+;-u =
+# Area per lipid (nm*nm)
+;-a =
+# Area per lipid (nm*nm) for upper layer
+;-au =
+# Membrane asymmetry (number of lipids)
+;-asym =
+# Make a hole in the membrane with specified radius
+;-hole =
+# Make a membrane disc with specified radius
+;-disc =
+# Random kick size (maximum atom displacement)
+;-rand =
+# Bead distance unit for scaling z-coordinates (nm)
+;-bd =
+
+
+###  Protein related options ###
+
+# Center the protein on z
+-center = True
+# Orient protein in membrane
+;-orient = False
+# Rotate protein (random|princ|angle(float))
+-rotate = princ
+# Grid spacing for determining orientation
+;-od =
+# Hydrophobic ratio power for determining orientation
+;-op =
+# Fudge factor for allowing lipid-protein overlap
+;-fudge =
+#  Put lipids inside the protein (use it only if using multiple proteins as input protein)
+;-ring =
+# Shift protein with respect to membrane
+;-dm =
+
+
+###  Solvent related options  ###
+
+# Solvent type and relative abundance (NAME[:#])
+-sol = W
+# Solvent diameter
+;-sold =
+# Solvent random kick
+;-solr =
+# Exclusion range (nm) for solvent addition relative to membrane center
+;-excl =
+
+
+###  Salt related options  ###
+
+# Salt concentration (0.15 M)
+-salt = 0.15
+# Charge of system. Set to auto to infer from residue names (usually set to 0)
+-charge = 0
+
+
+###  Define additional lipid types (same format as in lipid-martini-itp-v01.py)  ###
+
+# Additional lipid name, x4 letter
+;-alname =
+# Additional lipid head specification string
+;-alhead =
+# Additional lipid linker specification string
+;-allink =
+# Additional lipid tail specification string
+;-altail =

@@ -1,10 +1,9 @@
-import sys, os
+import os, sys
 
 
 def clean_pdb(filename):
     with open(filename) as fin:
         lines = fin.readlines()
-
 
     outfile = 'clean_' + filename
     fout = open(outfile, 'w')
@@ -21,6 +20,7 @@ def clean_pdb(filename):
     fout.close()
     return True
 
+
 def runDSSP(filename):
     # Generate DSSP output files
     do_dssp = './dssp_exe '
@@ -29,3 +29,13 @@ def runDSSP(filename):
     run_cmd = do_dssp + infile + " " + out_dssp
     os.system(run_cmd)
     return True
+
+
+def main():
+    clean_pdb(sys.argv[1])
+    runDSSP(sys.argv[1])
+    return True
+
+if __name__ == "__main__":
+    main()
+
