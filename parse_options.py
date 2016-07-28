@@ -24,16 +24,16 @@ def parseconfig(filename):
 
     martinize_flags = ''
     for key in option_keys:
-        if key in preprocess:
+        if key in options:
             pass
         else:
             martinize_flags = martinize_flags + ' ' + key + ' ' + options[key]
 
     preprocess_flags = ''
     for key in option_keys:
-        if key in preprocess:
+        if key in options:
             preprocess_flags = preprocess_flags + ' ' + key + ' ' + options[key]
         else:
             pass
 
-    return martinize_flags, preprocess_flags
+    return preprocess_flags

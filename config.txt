@@ -1,13 +1,17 @@
 ###########################
-####   Preprocessing   ####
+preprocess_options
 ###########################
 
 # Give a PDB file for processing/cleaning (mandatory)
 -protein = protein.pdb
 
+###########################
+end_preprocess
+###########################
+
 
 ###########################
-#### martinize options ####
+;martinize_options
 ###########################
 
 ### Forcefield options ###
@@ -80,10 +84,13 @@
 # Comma separated list of bead names for elastic bonds
 ;-eb  = []
 
+###########################
+;end_martinize_options
+###########################
 
 
 ###########################
-####   insane options  ####
+;insane_options
 ###########################
 
 ###  Periodic boundary conditions  ###
@@ -174,3 +181,18 @@ Lipid type and relative abundance (NAME[:#]) (use multiple -u to define differen
 ;-allink =
 # Additional lipid tail specification string
 ;-altail =
+
+###########################
+;end_insane_options
+###########################
+
+
+###########################
+;simulation_options
+###########################
+
+
+
+###########################
+;end_simulation_options
+###########################
