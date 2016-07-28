@@ -1,17 +1,17 @@
 ###########################
-preprocess_options
+#preprocess_options
 ###########################
 
 # Give a PDB file for processing/cleaning (mandatory)
 -protein = protein.pdb
 
 ###########################
-end_preprocess
+#end_preprocess_options
 ###########################
 
 
 ###########################
-;martinize_options
+#martinize_options
 ###########################
 
 ### Forcefield options ###
@@ -85,12 +85,12 @@ end_preprocess
 ;-eb  = []
 
 ###########################
-;end_martinize_options
+#end_martinize_options
 ###########################
 
 
 ###########################
-;insane_options
+#insane_options
 ###########################
 
 ###  Periodic boundary conditions  ###
@@ -183,16 +183,26 @@ Lipid type and relative abundance (NAME[:#]) (use multiple -u to define differen
 ;-altail =
 
 ###########################
-;end_insane_options
+#end_insane_options
 ###########################
 
 
 ###########################
-;simulation_options
+#simulation_options
 ###########################
 
 
 
 ###########################
-;end_simulation_options
+#end_simulation_options
+###########################
+
+###########################
+#md_options
+###########################
+
+
+
+###########################
+#end_md_options
 ###########################

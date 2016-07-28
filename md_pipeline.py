@@ -1,6 +1,6 @@
-import  new_parse_options
+import  parse_options
 
-preprocess_flags = new_parse_options.parseconfig('config.txt')
+preprocess_flags = parse_options.parseConfig2('config.txt')
 #print martinize_flags
 
 print preprocess_flags
