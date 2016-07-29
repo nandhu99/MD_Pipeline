@@ -1,4 +1,5 @@
-import os, sys
+import os
+import sys
 
 
 def clean_pdb(filename):
@@ -36,6 +37,6 @@ def main():
     runDSSP(sys.argv[1])
     return True
 
+
 if __name__ == "__main__":
     main()
-

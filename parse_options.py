@@ -1,4 +1,3 @@
-
 def parseConfig2(filename):
     with open(filename) as fin:
         lines = fin.readlines()
