@@ -3,7 +3,7 @@
 ###########################
 
 # Give a PDB file for processing/cleaning (mandatory)
--protein = protein.pdb
+-protein = 5ftt.pdb
 
 ###########################
 #end_preprocess_options

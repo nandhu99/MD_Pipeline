@@ -19,17 +19,17 @@ def clean_pdb(filename):
         if line[0:6] == 'ENDMDL' and nmr_model:
             break
     fout.close()
-    return True
+    return outfile
 
 
 def runDSSP(filename):
     # Generate DSSP output files
     do_dssp = './dssp_exe '
     infile = filename
-    out_dssp = infile + ".dssp"
+    out_dssp = infile[:-4] + ".dssp"
     run_cmd = do_dssp + infile + " " + out_dssp
     os.system(run_cmd)
-    return True
+    return out_dssp
 
 
 def main():
