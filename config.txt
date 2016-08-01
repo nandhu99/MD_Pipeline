@@ -98,11 +98,11 @@
 # PBC type: hexagonal, rectangular, square, cubic, optimal or keep
 -pbc = square
 # X dimension or first lattice vector of system (nm)
--x = 10
+-x = 20
 # Y dimension or first lattice vector of system (nm)
--y = 10
+-y = 20
 # Z dimension or first lattice vector of system (nm)
--z = 10
+-z = 20
 # Distance between periodic images (nm)
 ;-d = 0
 #  Z distance between periodic images (nm)
@@ -112,9 +112,10 @@
 ###  Membrane/lipid related options  ###
 
 # Lipid type and relative abundance (NAME[:#]) (use multiple -l to define different lipid mixtures)
-;-l =
+-l = DPPC:50 POPC:50
 Lipid type and relative abundance (NAME[:#]) (use multiple -u to define different lipid mixtures)
-;-u =
+-u = DPPC:50 POPC:50
+
 # Area per lipid (nm*nm)
 ;-a =
 # Area per lipid (nm*nm) for upper layer

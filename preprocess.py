@@ -1,5 +1,4 @@
 import os
-import sys
 
 
 def clean_pdb(filename):
@@ -30,13 +29,3 @@ def runDSSP(filename):
     run_cmd = do_dssp + infile + " " + out_dssp
     os.system(run_cmd)
     return out_dssp
-
-
-def main():
-    clean_pdb(sys.argv[1])
-    runDSSP(sys.argv[1])
-    return True
-
-
-if __name__ == "__main__":
-    main()
