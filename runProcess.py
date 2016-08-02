@@ -1,5 +1,6 @@
-import preprocess
 import os
+
+import preprocess
 
 
 def runPreProcess(all_flags):
@@ -102,8 +103,8 @@ def make_ndx(system, lipids):
     for lipid in lipids:
         lipid = lipid.split(':')
         ndx_flags = ndx_flags + ' ' + lipid[0]
-    system_ndx = system[:-4]+'.ndx'
-    index = 'make_ndx -f ' + system + ' -o ' + system_ndx + ' <<EOF\n 1 | r ' + ndx_flags + ' \n 11  &  !  r ' + ndx_flags + ' \n  q \n EOF'
+    system_ndx = system[:-4] + '.ndx'
+    index = 'gmx make_ndx -f ' + system + ' -o ' + system_ndx + ' <<EOF\n 1 | r ' + ndx_flags + ' \n 11  &  !  r ' + ndx_flags + ' \n  q \n EOF'
     os.system(index)
     return system_ndx
 
@@ -127,6 +128,9 @@ def make_topology(cg_topol, system_top):
         if 'molecules' in sys_lines[i]:
             start = i + 3
             for j in range(start, len(sys_lines)):
+                if 'NA+' in sys_lines[j] or 'CL-' in sys_lines[j]:
+                    temp_lines = sys_lines[j].strip('+')
+                    print temp_lines
                 new_sys_lines.append(sys_lines[j])
             break
 
@@ -147,38 +151,54 @@ def runMinimization(all_flags, system, topology, system_ndx):
     for option in all_flags:
         if option[0] == 'energy_min_options':
             for t in option[1:]:
-                t[0] = t[0].strip()
-                t[1] = t[1].strip()
-                if t[1] == 'False' or t[1] == 'false':
-                    pass
-                elif t[1] == 'True' or t[1] == 'true':
-                    em_flags[t[0]] = ''
-                else:
-                    em_flags[t[0]] = t[1]
+                em_flags[t[0]] = t[1]
 
-    minimize_flags = ''
+    min_flags = ''
     for key in em_flags:
-        minimize_flags = minimize_flags + ' ' + key + ' ' + em_flags[key]
+        min_flags = min_flags + ' ' + key + ' = ' + em_flags[key] + '\n'
+
     em_mdp = 'em.mdp'
+    em_lines = "### this is an energy minimization parameter file (em.mdp) ### \n"
     with open(em_mdp, 'w') as fout:
-        fout.write(minimize_flags)
-    return True
+        fout.write(em_lines)
+        for line in min_flags:
+            fout.write(line)
 
+    em_gro = system[:-4] + '_EM.gro'
+    em_tpr = system[:-4] + '_EM.tpr'
 
-"""
-    martinize_flags = martinize_flags + ' -f ' + clean_pdb + ' -ss ' + dssp_file + ' -x ' + cg_protein + ' -o ' + cg_topol + ' -n ' + cg_index + ' -nmap ' + nmap
-    run_martinize = 'python martinize.py ' + martinize_flags
-    os.system(run_martinize)
-    return cg_protein, cg_topol, cg_index, nmap
-    em_grompp = 'grompp -f ' + em_mdp + ' -c ' + system + ' -p ' + topology + ' -n ' + system_ndx + ' -o em_1.tpr '
-    em_mdrun = 'mdrun -s em_1.tpr -v -deffnm em_1'
+    run_em_grompp = 'grompp -f ' + em_mdp + ' -c ' + system + ' -p ' + topology + ' -n ' + system_ndx + ' -o ' + em_tpr
+    os.system(run_em_grompp)
+    run_em_mdrun = 'mdrun -s ' + em_tpr + ' -v -deffnm ' + system[:-4] + '_EM'
+    os.system(run_em_mdrun)
+
     return em_gro
 
 
-def runEquilibration(all_flags, equil_mdp, em_gro, topology, system_ndx):
-    equil_gro = 'equil.gro'
-    equil_grompp = 'grompp -f ' + equil_mdp + ' -c ' + em_gro + ' -p ' + topology + ' -n ' + system_ndx + ' -o equil.tpr '
-    equil_mdrun = 'mdrun -s equil.tpr -v -deffnm equil'
-    return equil_gro
+def runEquilibration(all_flags, system, em_gro, topology, system_ndx):
+    equil_flags = {}
+    for option in all_flags:
+        if option[0] == 'equilibration_options':
+            for t in option[1:]:
+                equil_flags[t[0]] = t[1]
 
-"""
+    eq_flags = ''
+    for key in equil_flags:
+        eq_flags = eq_flags + ' ' + key + ' = ' + equil_flags[key] + '\n'
+
+    equil_mdp = 'equil.mdp'
+    equil_lines = "### this is an npt equilibration parameter file (equil.mdp) ### \n"
+    with open(equil_mdp, 'w') as fout:
+        fout.write(equil_lines)
+        for line in eq_flags:
+            fout.write(line)
+
+    equil_gro = system[:-4] + '_EQUIL.gro'
+    equil_tpr = system[:-4] + '_EQUIL.tpr'
+
+    run_equil_grompp = 'grompp -f ' + equil_mdp + ' -c ' + em_gro + ' -p ' + topology + ' -n ' + system_ndx + ' -o ' + equil_tpr
+    os.system(run_equil_grompp)
+    run_equil_mdrun = 'mdrun -s ' + equil_tpr + ' -v -deffnm ' + system[:-4] + '_EQUIL'
+    os.system(run_equil_mdrun)
+
+    return equil_gro

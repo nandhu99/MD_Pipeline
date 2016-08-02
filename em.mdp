@@ -1,1 +1,18 @@
- vdw-type cut-off coulombtype Reaction-Field rlist 1.4 epsilon_r 15 nstxtcout 100 integrator steep epsilon_rf 62 nstxout 0 nstvout 0 xtc-precision 50 nstlog 100 rcoulomb 1.1 cutoff-scheme verlet dt 0.02 rvdw-switch 0.9 nsteps 10000 rvdw 1.1
+### this is an energy minimization parameter file (em.mdp) ### 
+ nstvout           =   0
+ nstlog            =   100
+ vdw-type          =   cut-off
+ nsteps            =   10000
+ rcoulomb          =   1.1
+ rvdw-switch       =   0.9
+ coulombtype       =   Reaction-Field
+ xtc-precision     =   50
+ integrator        =   steep
+ nstxout           =   0
+ cutoff-scheme     =   verlet
+ rvdw              =   1.1
+ rlist             =   1.4
+ dt                =   0.02
+ epsilon_rf        =   62
+ epsilon_r         =   15
+ nstxtcout         =   100
