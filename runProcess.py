@@ -175,38 +175,38 @@ def runMinimization(all_flags, system, topology, system_ndx):
     em_gro = system[:-4] + '_EM.gro'
     em_tpr = system[:-4] + '_EM.tpr'
 
-    run_em_grompp = 'grompp -f ' + em_mdp + ' -c ' + system + ' -p ' + topology + ' -n ' + system_ndx + ' -o ' + em_tpr
+    run_em_grompp = 'gmx grompp -f ' + em_mdp + ' -c ' + system + ' -p ' + topology + ' -n ' + system_ndx + ' -o ' + em_tpr
     os.system(run_em_grompp)
-    run_em_mdrun = 'mdrun -s ' + em_tpr + ' -v -deffnm ' + system[:-4] + '_EM'
+    run_em_mdrun = 'gmx mdrun -s ' + em_tpr + ' -v -deffnm ' + system[:-4] + '_EM'
     os.system(run_em_mdrun)
 
     return em_gro
 
 
 def runEquilibration(all_flags, system, em_gro, topology, system_ndx):
-    equil_flags = {}
+    eq_flags = {}
     for option in all_flags:
         if option[0] == 'equilibration_options':
             for t in option[1:]:
-                equil_flags[t[0]] = t[1]
+                eq_flags[t[0]] = t[1]
 
-    eq_flags = ''
-    for key in equil_flags:
-        eq_flags = eq_flags + ' ' + key + ' = ' + equil_flags[key] + '\n'
+    equil_flags = ''
+    for key in eq_flags:
+        equil_flags = equil_flags + ' ' + key + ' = ' + eq_flags[key] + '\n'
 
     equil_mdp = 'equil.mdp'
     equil_lines = "### this is an npt equilibration parameter file (equil.mdp) ### \n"
     with open(equil_mdp, 'w') as fout:
         fout.write(equil_lines)
-        for line in eq_flags:
+        for line in equil_flags:
             fout.write(line)
 
     equil_gro = system[:-4] + '_EQUIL.gro'
     equil_tpr = system[:-4] + '_EQUIL.tpr'
 
-    run_equil_grompp = 'grompp -f ' + equil_mdp + ' -c ' + em_gro + ' -p ' + topology + ' -n ' + system_ndx + ' -o ' + equil_tpr
+    run_equil_grompp = 'gmx grompp -f ' + equil_mdp + ' -c ' + em_gro + ' -p ' + topology + ' -n ' + system_ndx + ' -o ' + equil_tpr + ' -maxwarn 10'
     os.system(run_equil_grompp)
-    run_equil_mdrun = 'mdrun -s ' + equil_tpr + ' -v -deffnm ' + system[:-4] + '_EQUIL'
+    run_equil_mdrun = 'gmx mdrun -s ' + equil_tpr + ' -v -deffnm ' + system[:-4] + '_EQUIL'
     os.system(run_equil_mdrun)
 
     return equil_gro

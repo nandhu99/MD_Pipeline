@@ -3,7 +3,7 @@
 ###########################
 
 # Give a PDB file for processing/cleaning (mandatory)
--protein = 5ftt.pdb
+-protein = 5a44.pdb
 
 ###########################
 #end_preprocess_options
@@ -49,7 +49,7 @@
 # link (+)type
 ;-link = False
 # Merge chains: e.g. -merge A,B,C (+)
-;-merge = A,B,C,D,E,F,G,H
+;-merge =
 # Chain to be set up for multiscaling (+)
 ;-multi =
 
@@ -98,11 +98,11 @@
 # PBC type: hexagonal, rectangular, square, cubic, optimal or keep
 -pbc = square
 # X dimension or first lattice vector of system (nm)
--x = 20
+-x = 10
 # Y dimension or first lattice vector of system (nm)
--y = 20
+-y = 10
 # Z dimension or first lattice vector of system (nm)
--z = 20
+-z = 10
 # Distance between periodic images (nm)
 ;-d = 0
 #  Z distance between periodic images (nm)
@@ -194,7 +194,7 @@ Lipid type and relative abundance (NAME[:#]) (use multiple -u to define differen
 
 integrator       =  steep
 dt               =  0.02
-nsteps           =  10000
+nsteps           =  50000
 nstxout          =  0
 nstvout          =  0
 nstlog           =  100
@@ -216,37 +216,65 @@ cutoff-scheme    =  verlet
 
 
 ###########################
-#equil_options
+#equilibration_options
 ###########################
 
-define           =  -DPOSRES
-integrator       =  md
-dt               =  0.02
-nsteps           =  25000
-nstxout          =  0
-nstvout          =  0
-nstlog           =  100
-nstxtcout        =  100
-xtc-precision    =  100
-rlist            =  1.4
-coulombtype      =  Reaction-Field
-rcoulomb         =  1.1
-epsilon_r        =  15
-epsilon_rf       =  62
-vdw-type         =  cut-off
-rvdw-switch      =  0.9
-rvdw             =  1.1
-tcoupl           =  v-rescale
-tc-grps          =  Protein DPPC W
-tau-t            =  1.0 1.0 1.0
-ref-t            =  300 300 300
-Pcoupl           =  parrinello-rahman
-Pcoupltype       =  semiisotropic
-tau-p            =  12.0 12.0
-compressibility  =  3e-4 3e-4
-ref-p            =  1.0 1.0
-refcoord_scaling =  all
+title                    = Martini
+define                   = -DPOSRESCA
+refcoord_scaling	     = COM
+integrator               = md
+dt                       = 0.02  ; I do not think we will be able to go higher than that … even 0.01 might be necessary.
+nsteps                   = 500000
+nstcomm                  = 10
+comm-grps		         = Protein_DPPC_POPC non-Protein_&_!DPPC_POPC
+
+nstxout                  = 0
+nstvout                  = 0
+nstfout                  = 0
+nstlog                   = 1000
+nstenergy                = 5000
+
+; This might be good to keep small for equilibration but afterwards we'll need to increase it.
+nstxtcout                = 5000
+xtc_precision            = 100
+xtc-grps                 =
+energygrps               = Protein_DPPC_POPC non-Protein_&_!DPPC_POPC
+nstlist                  = 10
+ns_type                  = grid
+pbc                      = xyz
+rlist                    = 1.4
+
+coulombtype              = reaction-field
+rcoulomb_switch          = 0.0
+rcoulomb                 = 1.2
+epsilon_r                = 15
+epsilon_rf               = 62
+vdw_type                 = Shift
+rvdw_switch              = 0.9
+rvdw                     = 1.2
+
+tcoupl                   = v-rescale
+tc-grps                  = Protein_DPPC_POPC non-Protein_&_!DPPC_POPC
+tau_t                    = 2.0 2.0
+ref_t                    = 310 310
+
+Pcoupl                   = berendsen ; for equilibration
+Pcoupltype               = semiisotropic
+tau_p                    = 5.0 5.0  ; with Berendsen
+compressibility          = 3e-4  3e-4
+ref_p                    = 1.0  1.0
+
+gen_vel                  = yes
+gen_temp                 = 310
+gen_seed                 = 473529
+
+constraints              = none
+constraint_algorithm     = Lincs
+continuation             = no
+lincs_order              = 4
+lincs_warnangle          = 30
+
 
 ###########################
-#end_equil_options
+#end_equilibration_options
 ###########################
