@@ -1,0 +1,27 @@
+#include "martini.itp"
+
+#define RUBBER_BANDS
+
+#include "Protein_A.itp"
+#include "Protein_C.itp"
+#include "Protein_B.itp"
+#include "Protein_E.itp"
+#include "Protein_D.itp"
+#include "Protein_G.itp"
+#include "Protein_F.itp"
+#include "Protein_H.itp"
+
+[ system ]
+; name
+Martini system from clean_5ftt.pdb
+
+[ molecules ]
+; name        number
+Protein_A 	 1
+Protein_B 	 1
+Protein_C 	 1
+Protein_D 	 1
+Protein_E 	 1
+Protein_F 	 1
+Protein_G 	 1
+Protein_H 	 1

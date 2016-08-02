@@ -1,0 +1,16 @@
+#include "martini.itp"
+
+[ system ]
+; name
+Protein in INSANE! Membrane UpperLeaflet>DPPC:POPC=50.0:50.0 LowerLeaflet>DPPC:POPC=50.0:50.0
+
+[ molecules ]
+; name  number
+Protein        1
+DPPC           256
+POPC           256
+DPPC           257
+POPC           257
+W            49971
+NA+            550
+CL-            550
