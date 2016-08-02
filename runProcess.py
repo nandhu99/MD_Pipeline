@@ -110,7 +110,7 @@ def make_ndx(system, lipids):
 
 
 def make_topology(cg_topol, system_top):
-    first_lines = '#include "martini_v2.2.itp" \n#include "martini_v2.0_lipids.itp"\n'
+    first_lines = '#include "martini_v2.2.itp" \n#include "martini_v2.0_lipids.itp" \n#include "martini_v2.0_ions.itp"\n'
 
     with open(cg_topol) as fin:
         cg_lines = fin.readlines()
@@ -128,9 +128,17 @@ def make_topology(cg_topol, system_top):
         if 'molecules' in sys_lines[i]:
             start = i + 3
             for j in range(start, len(sys_lines)):
-                if 'NA+' in sys_lines[j] or 'CL-' in sys_lines[j]:
-                   
-
+                '''
+                if '+' in sys_lines[j] or '-' in sys_lines[j]:
+                    tline = sys_lines[j]
+                    tline = tline.split()
+                    charge = '+-'
+                    for char in charge:
+                        tline[0] = tline[0].replace(char, '')
+                    newtline = tline[0]+"           "+ tline[1]+'\n'
+                    new_sys_lines.append(newtline)
+                else:
+                '''
                 new_sys_lines.append(sys_lines[j])
             break
 

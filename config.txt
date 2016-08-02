@@ -168,8 +168,8 @@ Lipid type and relative abundance (NAME[:#]) (use multiple -u to define differen
 
 # Salt concentration (0.15 M)
 -salt = 0.15
-# Charge of system. Set to auto to infer from residue names (usually set to 0)
--charge = 0
+# Charge of system. Set to auto to infer from residue names
+-charge = auto
 
 
 ###  Define additional lipid types (same format as in lipid-martini-itp-v01.py)  ###
