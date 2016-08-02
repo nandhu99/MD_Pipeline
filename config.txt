@@ -194,7 +194,7 @@ Lipid type and relative abundance (NAME[:#]) (use multiple -u to define differen
 
 integrator       =  steep
 dt               =  0.02
-nsteps           =  50000
+nsteps           =  5000
 nstxout          =  0
 nstvout          =  0
 nstlog           =  100
@@ -224,7 +224,7 @@ define                   = -DPOSRESCA
 refcoord_scaling	     = COM
 integrator               = md
 dt                       = 0.02  ; I do not think we will be able to go higher than that … even 0.01 might be necessary.
-nsteps                   = 500000
+nsteps                   = 50000
 nstcomm                  = 10
 comm-grps		         = Protein_DPPC_POPC non-Protein_&_!DPPC_POPC
 
@@ -238,7 +238,7 @@ nstenergy                = 5000
 nstxtcout                = 5000
 xtc_precision            = 100
 xtc-grps                 =
-energygrps               = Protein_DPPC_POPC non-Protein_&_!DPPC_POPC
+energygrps               =
 nstlist                  = 10
 ns_type                  = grid
 pbc                      = xyz
@@ -254,7 +254,7 @@ rvdw_switch              = 0.9
 rvdw                     = 1.2
 
 tcoupl                   = v-rescale
-tc-grps                  = Protein_DPPC_POPC non-Protein_&_!DPPC_POPC
+tc-grps                  =
 tau_t                    = 2.0 2.0
 ref_t                    = 310 310
 

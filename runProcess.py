@@ -176,14 +176,14 @@ def runMinimization(all_flags, system, topology, system_ndx):
     em_tpr = system[:-4] + '_EM.tpr'
 
     run_em_grompp = 'gmx grompp -f ' + em_mdp + ' -c ' + system + ' -p ' + topology + ' -n ' + system_ndx + ' -o ' + em_tpr
-    os.system(run_em_grompp)
+    #os.system(run_em_grompp)
     run_em_mdrun = 'gmx mdrun -s ' + em_tpr + ' -v -deffnm ' + system[:-4] + '_EM'
-    os.system(run_em_mdrun)
+    #os.system(run_em_mdrun)
 
     return em_gro
 
 
-def runEquilibration(all_flags, system, em_gro, topology, system_ndx):
+def runEquilibration(all_flags, system, lipids, em_gro, topology, system_ndx):
     eq_flags = {}
     for option in all_flags:
         if option[0] == 'equilibration_options':
@@ -192,7 +192,11 @@ def runEquilibration(all_flags, system, em_gro, topology, system_ndx):
 
     equil_flags = ''
     for key in eq_flags:
+        if 'grps' in key:
+            eq_flags[key] == 'Protein_'+lipids[0]
+            print eq_flags[key]
         equil_flags = equil_flags + ' ' + key + ' = ' + eq_flags[key] + '\n'
+
 
     equil_mdp = 'equil.mdp'
     equil_lines = "### this is an npt equilibration parameter file (equil.mdp) ### \n"
@@ -205,8 +209,8 @@ def runEquilibration(all_flags, system, em_gro, topology, system_ndx):
     equil_tpr = system[:-4] + '_EQUIL.tpr'
 
     run_equil_grompp = 'gmx grompp -f ' + equil_mdp + ' -c ' + em_gro + ' -p ' + topology + ' -n ' + system_ndx + ' -o ' + equil_tpr + ' -maxwarn 10'
-    os.system(run_equil_grompp)
+    #os.system(run_equil_grompp)
     run_equil_mdrun = 'gmx mdrun -s ' + equil_tpr + ' -v -deffnm ' + system[:-4] + '_EQUIL'
-    os.system(run_equil_mdrun)
+    #os.system(run_equil_mdrun)
 
     return equil_gro
