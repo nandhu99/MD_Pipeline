@@ -34,7 +34,7 @@ def runMaritinize(all_flags, clean_pdb, dssp_file):
     for key in mar_flags:
         martinize_flags = martinize_flags + ' ' + key + ' ' + mar_flags[key]
 
-    cg_protein = clean_pdb[:-4] + '_CG.gro'
+    cg_protein = clean_pdb[:-4] + '_CG.pdb'
     cg_topol = clean_pdb[:-4] + '_CG.top'
     cg_index = clean_pdb[:-4] + '_CG.ndx'
     nmap = clean_pdb[:-4] + '_map.ndx'
