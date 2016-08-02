@@ -129,7 +129,7 @@ def make_topology(cg_topol, system_top):
             start = i + 3
             for j in range(start, len(sys_lines)):
                 if 'NA+' in sys_lines[j] or 'CL-' in sys_lines[j]:
-                    print sys_lines[j].strip()
+                   
 
                 new_sys_lines.append(sys_lines[j])
             break
