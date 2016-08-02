@@ -8,7 +8,7 @@ def runPreProcess(all_flags):
             t = option[1]
             t[0] = t[0].strip()
             t[1] = t[1].strip()
-            if t[0] == '-protein':
+            if t[0] == '-protein' or 'protein' in t[0]:
                 clean_file = preprocess.clean_pdb(t[1])
                 dssp_out = preprocess.runDSSP(clean_file)
                 return clean_file, dssp_out
@@ -44,7 +44,7 @@ def runMaritinize(all_flags, clean_pdb, dssp_file):
     return cg_protein, cg_topol, cg_index, nmap
 
 
-def checkBox(all_flags, clean_pdb, cg_protein, cg_topol):
+def runInsane(all_flags, clean_pdb, cg_protein, cg_topol):
     import protein_dimensions
     protein_dim = protein_dimensions.box_dimension(clean_pdb)
     sane_flags = {}
@@ -102,10 +102,83 @@ def make_ndx(system, lipids):
     for lipid in lipids:
         lipid = lipid.split(':')
         ndx_flags = ndx_flags + ' ' + lipid[0]
-    index = 'make_ndx -f ' + system + ' -o ' + system[
-                                               :-4] + '.ndx<<EOF\n 1 | r ' + ndx_flags + ' \n 11  &  !  r ' + ndx_flags + ' \n  q \n EOF'
+    system_ndx = system[:-4]+'.ndx'
+    index = 'make_ndx -f ' + system + ' -o ' + system_ndx + ' <<EOF\n 1 | r ' + ndx_flags + ' \n 11  &  !  r ' + ndx_flags + ' \n  q \n EOF'
     os.system(index)
+    return system_ndx
+
+
+def make_topology(cg_topol, system_top):
+    first_lines = '#include "martini_v2.2.itp" \n#include "martini_v2.0_lipids.itp"\n'
+
+    with open(cg_topol) as fin:
+        cg_lines = fin.readlines()
+    new_cg_lines = []
+    for i in range(0, len(cg_lines)):
+        if '"martini.itp"' in cg_lines[i]:
+            pass
+        else:
+            new_cg_lines.append(cg_lines[i])
+
+    with open(system_top) as fin:
+        sys_lines = fin.readlines()
+    new_sys_lines = []
+    for i in range(0, len(sys_lines)):
+        if 'molecules' in sys_lines[i]:
+            start = i + 3
+            for j in range(start, len(sys_lines)):
+                new_sys_lines.append(sys_lines[j])
+            break
+
+    topology = 'topol.top'
+    with open(topology, 'w') as fout:
+        fout.write(first_lines)
+        for line in new_cg_lines:
+            fout.write(line)
+        fout.write('\n')
+        for line in new_sys_lines:
+            fout.write(line)
+
+    return topology
+
+
+def runMinimization(all_flags, system, topology, system_ndx):
+    em_flags = {}
+    for option in all_flags:
+        if option[0] == 'energy_min_options':
+            for t in option[1:]:
+                t[0] = t[0].strip()
+                t[1] = t[1].strip()
+                if t[1] == 'False' or t[1] == 'false':
+                    pass
+                elif t[1] == 'True' or t[1] == 'true':
+                    em_flags[t[0]] = ''
+                else:
+                    em_flags[t[0]] = t[1]
+
+    minimize_flags = ''
+    for key in em_flags:
+        minimize_flags = minimize_flags + ' ' + key + ' ' + em_flags[key]
+    em_mdp = 'em.mdp'
+    with open(em_mdp, 'w') as fout:
+        fout.write(minimize_flags)
     return True
 
 
-def Energy_min():
+"""
+    martinize_flags = martinize_flags + ' -f ' + clean_pdb + ' -ss ' + dssp_file + ' -x ' + cg_protein + ' -o ' + cg_topol + ' -n ' + cg_index + ' -nmap ' + nmap
+    run_martinize = 'python martinize.py ' + martinize_flags
+    os.system(run_martinize)
+    return cg_protein, cg_topol, cg_index, nmap
+    em_grompp = 'grompp -f ' + em_mdp + ' -c ' + system + ' -p ' + topology + ' -n ' + system_ndx + ' -o em_1.tpr '
+    em_mdrun = 'mdrun -s em_1.tpr -v -deffnm em_1'
+    return em_gro
+
+
+def runEquilibration(all_flags, equil_mdp, em_gro, topology, system_ndx):
+    equil_gro = 'equil.gro'
+    equil_grompp = 'grompp -f ' + equil_mdp + ' -c ' + em_gro + ' -p ' + topology + ' -n ' + system_ndx + ' -o equil.tpr '
+    equil_mdrun = 'mdrun -s equil.tpr -v -deffnm equil'
+    return equil_gro
+
+"""

@@ -49,7 +49,7 @@
 # link (+)type
 ;-link = False
 # Merge chains: e.g. -merge A,B,C (+)
-;-merge = False
+;-merge = A,B,C,D,E,F,G,H
 # Chain to be set up for multiscaling (+)
 ;-multi =
 
@@ -189,21 +189,64 @@ Lipid type and relative abundance (NAME[:#]) (use multiple -u to define differen
 
 
 ###########################
-#simulation_options
+#energy_min_options
+###########################
+
+integrator       =  steep
+dt               =  0.02
+nsteps           =  10000
+nstxout          =  0
+nstvout          =  0
+nstlog           =  100
+nstxtcout        =  100
+xtc-precision    =  50
+rlist            =  1.4
+coulombtype      =  Reaction-Field
+rcoulomb         =  1.1
+epsilon_r        =  15
+epsilon_rf       =  62
+vdw-type         =  cut-off
+rvdw-switch      =  0.9
+rvdw             =  1.1
+cutoff-scheme    =  verlet
+
+###########################
+#end_energy_min_options
 ###########################
 
 
-
 ###########################
-#end_simulation_options
-###########################
-
-###########################
-#md_options
+#equil_options
 ###########################
 
-
+define           =  -DPOSRES
+integrator       =  md
+dt               =  0.02
+nsteps           =  25000
+nstxout          =  0
+nstvout          =  0
+nstlog           =  100
+nstxtcout        =  100
+xtc-precision    =  100
+rlist            =  1.4
+coulombtype      =  Reaction-Field
+rcoulomb         =  1.1
+epsilon_r        =  15
+epsilon_rf       =  62
+vdw-type         =  cut-off
+rvdw-switch      =  0.9
+rvdw             =  1.1
+tcoupl           =  v-rescale
+tc-grps          =  Protein DPPC W
+tau-t            =  1.0 1.0 1.0
+ref-t            =  300 300 300
+Pcoupl           =  parrinello-rahman
+Pcoupltype       =  semiisotropic
+tau-p            =  12.0 12.0
+compressibility  =  3e-4 3e-4
+ref-p            =  1.0 1.0
+refcoord_scaling =  all
 
 ###########################
-#end_md_options
+#end_equil_options
 ###########################

@@ -5,15 +5,9 @@ import runProcess
 
 all_flags = parse_options.parseConfig2('config.txt')
 pdb_file, dssp_file = runProcess.runPreProcess(all_flags)
-print pdb_file, dssp_file
 cg_protein, cg_topol, cg_index, nmap = runProcess.runMaritinize(all_flags, pdb_file, dssp_file)
-bool_box, system, system_top, lipids = runProcess.checkBox(all_flags, pdb_file, cg_protein, cg_topol)
-ndx = runProcess.make_ndx(system, lipids)
-
-
-
-"""
-pdbfile = 'test.pdb'
-clean_pdb.clean_pdb(pdbfile)
-clean_pdb.runDSSP(clean_pdbfile)
-"""
+bool_box, system, system_top, lipids = runProcess.runInsane(all_flags, pdb_file, cg_protein, cg_topol)
+system_ndx = runProcess.make_ndx(system, lipids)
+topology = runProcess.make_topology(cg_topol, system_top)
+em = runProcess.runMinimization(all_flags, system, topology, system_ndx)
+#equil = runProcess.runEquilibration(equil_mdp, em_gro, topology, system_ndx)
