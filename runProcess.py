@@ -176,25 +176,36 @@ def runMinimization(all_flags, system, topology, system_ndx):
     em_tpr = system[:-4] + '_EM.tpr'
 
     run_em_grompp = 'gmx grompp -f ' + em_mdp + ' -c ' + system + ' -p ' + topology + ' -n ' + system_ndx + ' -o ' + em_tpr
-    #os.system(run_em_grompp)
+    os.system(run_em_grompp)
     run_em_mdrun = 'gmx mdrun -s ' + em_tpr + ' -v -deffnm ' + system[:-4] + '_EM'
-    #os.system(run_em_mdrun)
+    os.system(run_em_mdrun)
 
     return em_gro
 
 
 def runEquilibration(all_flags, system, lipids, em_gro, topology, system_ndx):
+    groups=[]
+    with open(system_ndx) as fin:
+        lines = fin.readlines()
+
+    for line in lines:
+        if '[' in line:
+            tline = line.strip()
+            tline = tline.lstrip('[').rstrip(']')
+            groups.append(tline)
+    groups = groups[-2:]
+
     eq_flags = {}
     for option in all_flags:
         if option[0] == 'equilibration_options':
             for t in option[1:]:
-                eq_flags[t[0]] = t[1]
+                if 'grps' in t[0]:
+                    eq_flags[t[0]] = groups[0] + groups[1]
+                else:
+                    eq_flags[t[0]] = t[1]
 
     equil_flags = ''
     for key in eq_flags:
-        if 'grps' in key:
-            eq_flags[key] == 'Protein_'+lipids[0]
-            print eq_flags[key]
         equil_flags = equil_flags + ' ' + key + ' = ' + eq_flags[key] + '\n'
 
 
@@ -209,8 +220,8 @@ def runEquilibration(all_flags, system, lipids, em_gro, topology, system_ndx):
     equil_tpr = system[:-4] + '_EQUIL.tpr'
 
     run_equil_grompp = 'gmx grompp -f ' + equil_mdp + ' -c ' + em_gro + ' -p ' + topology + ' -n ' + system_ndx + ' -o ' + equil_tpr + ' -maxwarn 10'
-    #os.system(run_equil_grompp)
+    os.system(run_equil_grompp)
     run_equil_mdrun = 'gmx mdrun -s ' + equil_tpr + ' -v -deffnm ' + system[:-4] + '_EQUIL'
-    #os.system(run_equil_mdrun)
+    os.system(run_equil_mdrun)
 
     return equil_gro
