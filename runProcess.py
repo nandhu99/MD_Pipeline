@@ -45,16 +45,44 @@ def runMaritinize(all_flags, clean_pdb, dssp_file):
     return cg_protein, cg_topol, cg_index, nmap
 
 
-def multiplyProtein(all_flags, clean_pdb, cg_protein):
+def multiplyProtein(all_flags, clean_pdb):
+    import protein_dimensions
+    protein_dim_temp = protein_dimensions.box_dimension(clean_pdb)
+    x_dim = protein_dim_temp[1]
+    y_dim = protein_dim_temp[2]
+    z_dim = protein_dim_temp[3]
+    multi_flags = {}
+    for option in all_flags:
+        if option[0] == 'multiProt_options':
+            for t in option[1:]:
+                t[0] = t[0].strip()
+                t[1] = t[1].strip()
+                multi_flags[t[0]] = t[1]
+
+    new_x_dim = []
+    new_y_dim = []
+    new_z_dim = []
+
+    for key in multi_flags:
+        if key == '-x_num':
+            for i in range (0,len(x_dim)):
+                new_x = float(x_dim[i])
+
+    return True
+
+    '''
+
     run_genconf = gmx genconf -f protein.pdb -o multiprot.gro -nbox 3 3 1
     os.system(run_genconf)
     return multi_prot
-
+'''
 
 
 def runInsane(all_flags, clean_pdb, cg_protein, cg_topol):
     import protein_dimensions
-    protein_dim = protein_dimensions.box_dimension(clean_pdb)
+    protein_dim_temp = protein_dimensions.box_dimension(clean_pdb)
+    protein_dim = protein_dim_temp[0]
+    print protein_dim
     sane_flags = {}
     for option in all_flags:
         if option[0] == 'insane_options':
@@ -78,7 +106,7 @@ def runInsane(all_flags, clean_pdb, cg_protein, cg_topol):
             insane_dim.append(float(sane_flags[key]))
 
     for i in range(0, len(insane_dim)):
-        if protein_dim[i] > insane_dim[i]:
+        if float(abs(protein_dim[i]) / 10) > insane_dim[i]:
             print "Error in specified insane dimensions"
             print "Protein is bigger than box"
             print "protein dim: ", protein_dim
@@ -191,7 +219,7 @@ def runMinimization(all_flags, system, topology, system_ndx):
 
 
 def runEquilibration(all_flags, system, em_gro, topology, system_ndx):
-    groups=[]
+    groups = []
     with open(system_ndx) as fin:
         lines = fin.readlines()
 
@@ -214,7 +242,6 @@ def runEquilibration(all_flags, system, em_gro, topology, system_ndx):
     equil_flags = ''
     for key in eq_flags:
         equil_flags = equil_flags + ' ' + key + ' = ' + eq_flags[key] + '\n'
-
 
     equil_mdp = 'equil.mdp'
     equil_lines = "### this is an npt equilibration parameter file (equil.mdp) ### \n"

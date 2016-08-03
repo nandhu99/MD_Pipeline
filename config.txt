@@ -93,8 +93,14 @@
 #multiProt_options
 ###########################
 
+### number of protein copies in x direction ### (default 1)
 -x_num = 1
+
+### number of protein copies in y direction ### (default 1)
 -y_num = 1
+
+### distance between the copies ### (default 10 nm)
+-dist = 10
 
 ###########################
 #end_multiProt_options
