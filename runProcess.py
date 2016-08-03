@@ -45,6 +45,13 @@ def runMaritinize(all_flags, clean_pdb, dssp_file):
     return cg_protein, cg_topol, cg_index, nmap
 
 
+def multiplyProtein(all_flags, clean_pdb, cg_protein):
+    run_genconf = gmx genconf -f protein.pdb -o multiprot.gro -nbox 3 3 1
+    os.system(run_genconf)
+    return multi_prot
+
+
+
 def runInsane(all_flags, clean_pdb, cg_protein, cg_topol):
     import protein_dimensions
     protein_dim = protein_dimensions.box_dimension(clean_pdb)
@@ -183,7 +190,7 @@ def runMinimization(all_flags, system, topology, system_ndx):
     return em_gro
 
 
-def runEquilibration(all_flags, system, lipids, em_gro, topology, system_ndx):
+def runEquilibration(all_flags, system, em_gro, topology, system_ndx):
     groups=[]
     with open(system_ndx) as fin:
         lines = fin.readlines()

@@ -15,3 +15,5 @@ def box_dimension(filename):
         z_dim.sort()
     return [float(abs(x_dim[0] - x_dim[-1]) / 10), float(abs(y_dim[0] - y_dim[-1]) / 10),
             float(abs(z_dim[0] - z_dim[-1]) / 10)]
+
+
