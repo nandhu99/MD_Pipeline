@@ -3,7 +3,7 @@
 ###########################
 
 # Give a PDB file for processing/cleaning (mandatory)
--protein = 5a44.pdb
+-protein = 3teq.pdb
 
 ###########################
 #end_preprocess_options
@@ -39,7 +39,7 @@
 # Set neutral termini (charged is default)
 ;-nt = False
 # Set charges at chain breaks (neutral is default)
-;-cb = False
+-cb = True
 
 
 ### chain options ###
@@ -49,7 +49,7 @@
 # link (+)type
 ;-link = False
 # Merge chains: e.g. -merge A,B,C (+)
-;-merge =
+;-merge = A,B,C,D
 # Chain to be set up for multiscaling (+)
 ;-multi =
 
@@ -57,9 +57,9 @@
 ### Position restraint options ###
 
 # Output position restraints (None/All/Backbone) (default: None)
-;-p = None
+-p = Backbone
 # Position restraints force constant (default: 1000 kJ/mol/nm^2)
-;-pf = 1000
+;pf = 100
 
 # Use dihedrals for extended regions rather than elastic bonds (Default: False)
 ;-ed = False
@@ -94,13 +94,13 @@
 ###########################
 
 ### number of protein copies in x direction ### (default 1)
--x_num = 1
+;-x_num = 1
 
 ### number of protein copies in y direction ### (default 1)
--y_num = 1
+;-y_num = 1
 
 ### distance between the copies ### (default 10 nm)
--dist = 10
+;-dist = 10
 
 ###########################
 #end_multiProt_options
@@ -116,11 +116,11 @@
 # PBC type: hexagonal, rectangular, square, cubic, optimal or keep
 -pbc = square
 # X dimension or first lattice vector of system (nm)
--x = 10
+-x = 15
 # Y dimension or first lattice vector of system (nm)
--y = 10
+-y = 15
 # Z dimension or first lattice vector of system (nm)
--z = 10
+-z = 15
 # Distance between periodic images (nm)
 ;-d = 0
 #  Z distance between periodic images (nm)
@@ -130,9 +130,9 @@
 ###  Membrane/lipid related options  ###
 
 # Lipid type and relative abundance (NAME[:#]) (use multiple -l to define different lipid mixtures)
--l = DPPC:50 POPC:50
+-l = DPPC:50 POPC:50 CHOL:10
 Lipid type and relative abundance (NAME[:#]) (use multiple -u to define different lipid mixtures)
--u = DPPC:50 POPC:50
+-u = DPPC:50 POPC:50 CHOL:10
 
 # Area per lipid (nm*nm)
 ;-a =
@@ -212,7 +212,7 @@ Lipid type and relative abundance (NAME[:#]) (use multiple -u to define differen
 
 integrator       =  steep
 dt               =  0.02
-nsteps           =  5000
+nsteps           =  50000
 nstxout          =  0
 nstvout          =  0
 nstlog           =  100

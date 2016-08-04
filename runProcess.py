@@ -44,6 +44,7 @@ def runMaritinize(all_flags, clean_pdb, dssp_file):
     os.system(run_martinize)
     return cg_protein, cg_topol, cg_index, nmap
 
+'''
 
 def multiplyProtein(all_flags, clean_pdb):
     import protein_dimensions
@@ -70,19 +71,17 @@ def multiplyProtein(all_flags, clean_pdb):
 
     return True
 
-    '''
+
 
     run_genconf = gmx genconf -f protein.pdb -o multiprot.gro -nbox 3 3 1
     os.system(run_genconf)
     return multi_prot
 '''
 
-
 def runInsane(all_flags, clean_pdb, cg_protein, cg_topol):
     import protein_dimensions
-    protein_dim_temp = protein_dimensions.box_dimension(clean_pdb)
-    protein_dim = protein_dim_temp[0]
-    print protein_dim
+    protein_dim = protein_dimensions.box_dimension(clean_pdb)
+
     sane_flags = {}
     for option in all_flags:
         if option[0] == 'insane_options':
@@ -106,7 +105,7 @@ def runInsane(all_flags, clean_pdb, cg_protein, cg_topol):
             insane_dim.append(float(sane_flags[key]))
 
     for i in range(0, len(insane_dim)):
-        if float(abs(protein_dim[i]) / 10) > insane_dim[i]:
+        if protein_dim[i] > insane_dim[i]:
             print "Error in specified insane dimensions"
             print "Protein is bigger than box"
             print "protein dim: ", protein_dim
@@ -212,7 +211,7 @@ def runMinimization(all_flags, system, topology, system_ndx):
 
     run_em_grompp = 'gmx grompp -f ' + em_mdp + ' -c ' + system + ' -p ' + topology + ' -n ' + system_ndx + ' -o ' + em_tpr
     os.system(run_em_grompp)
-    run_em_mdrun = 'gmx mdrun -s ' + em_tpr + ' -v -deffnm ' + system[:-4] + '_EM'
+    run_em_mdrun = 'gmx mdrun -ntmpi 1 -ntomp 4  -s ' + em_tpr + ' -v -deffnm ' + system[:-4] + '_EM'
     os.system(run_em_mdrun)
 
     return em_gro
@@ -255,7 +254,7 @@ def runEquilibration(all_flags, system, em_gro, topology, system_ndx):
 
     run_equil_grompp = 'gmx grompp -f ' + equil_mdp + ' -c ' + em_gro + ' -p ' + topology + ' -n ' + system_ndx + ' -o ' + equil_tpr + ' -maxwarn 10'
     os.system(run_equil_grompp)
-    run_equil_mdrun = 'gmx mdrun -s ' + equil_tpr + ' -v -deffnm ' + system[:-4] + '_EQUIL'
+    run_equil_mdrun = 'gmx mdrun -ntmpi 1 -ntomp 4  -s ' + equil_tpr + ' -v -deffnm ' + system[:-4] + '_EQUIL'
     os.system(run_equil_mdrun)
 
     return equil_gro
