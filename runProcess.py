@@ -44,6 +44,7 @@ def runMaritinize(all_flags, clean_pdb, dssp_file):
     os.system(run_martinize)
     return cg_protein, cg_topol, cg_index, nmap
 
+
 '''
 
 def multiplyProtein(all_flags, clean_pdb):
@@ -77,6 +78,7 @@ def multiplyProtein(all_flags, clean_pdb):
     os.system(run_genconf)
     return multi_prot
 '''
+
 
 def runInsane(all_flags, clean_pdb, cg_protein, cg_topol):
     import protein_dimensions
@@ -162,17 +164,6 @@ def make_topology(cg_topol, system_top):
         if 'molecules' in sys_lines[i]:
             start = i + 3
             for j in range(start, len(sys_lines)):
-                '''
-                if '+' in sys_lines[j] or '-' in sys_lines[j]:
-                    tline = sys_lines[j]
-                    tline = tline.split()
-                    charge = '+-'
-                    for char in charge:
-                        tline[0] = tline[0].replace(char, '')
-                    newtline = tline[0]+"           "+ tline[1]+'\n'
-                    new_sys_lines.append(newtline)
-                else:
-                '''
                 new_sys_lines.append(sys_lines[j])
             break
 
