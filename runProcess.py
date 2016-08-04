@@ -54,7 +54,7 @@ def multiplyProtein(all_flags, clean_pdb, cg_protein):
 
 def runInsane(all_flags, clean_pdb, cg_protein, cg_topol):
     import protein_dimensions
-    protein_dim = protein_dimensions.box_dimension(clean_pdb)
+    protein_dim = protein_dimensions.box_dimension(cg_protein)
     sane_flags = {}
     for option in all_flags:
         if option[0] == 'insane_options':
