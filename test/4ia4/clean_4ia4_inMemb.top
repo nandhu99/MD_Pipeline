@@ -1,0 +1,18 @@
+#include "martini.itp"
+
+[ system ]
+; name
+Protein in INSANE! Membrane UpperLeaflet>DPPC:POPC:CHOL=50.0:50.0:10.0 LowerLeaflet>DPPC:POPC:CHOL=50.0:50.0:10.0
+
+[ molecules ]
+; name  number
+Protein        1
+DPPC           139
+POPC           139
+CHOL            27
+DPPC           139
+POPC           139
+CHOL            27
+W             9494
+NA+             94
+CL-            116
