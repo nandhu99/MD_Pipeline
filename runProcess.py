@@ -1,7 +1,6 @@
 import os
 
 import preprocess
-
 import protein_dimensions
 
 
@@ -76,7 +75,10 @@ def multiplyProtein(all_flags, cg_protein):
     run_genconf = 'gmx genconf -f ' + box_protein + ' -o ' + multi_prot + ' -nbox ' + multi_flags['-x_num'] + ' ' + \
                   multi_flags['-y_num'] + ' ' + ' 1  -dist ' + multi_flags['-d']
     os.system(run_genconf)
-    return protein_box, multi_prot
+
+    total_prot = int(multi_flags['-x_num']) * int(multi_flags['-y_num'])
+
+    return protein_box, multi_prot, total_prot
 
 
 def runInsane(all_flags, clean_pdb, multi_prot, protein_box):
@@ -102,11 +104,9 @@ def runInsane(all_flags, clean_pdb, multi_prot, protein_box):
         if key == '-z':
             insane_dim.append(float(sane_flags[key]))
 
-
-    with open (multi_prot) as fin:
+    with open(multi_prot) as fin:
         lines = fin.readlines()
     new_box_size = lines[-1].split()
-
 
     for i in range(0, len(insane_dim)):
         if float(new_box_size[i]) > insane_dim[i]:
@@ -144,19 +144,30 @@ def make_ndx(system, lipids):
         ndx_flags = ndx_flags + ' ' + lipid[0]
     system_ndx = system[:-4] + '.ndx'
     index = 'gmx make_ndx -f ' + system + ' -o ' + system_ndx + ' <<EOF\n 1 | r ' + ndx_flags + ' \n 11  &  !  r ' + ndx_flags + ' \n  q \n EOF'
-    os.system(index)
+    # os.system(index)
     return system_ndx
 
 
-def make_topology(cg_topol, system_top):
+def make_topology(cg_topol, system_top, total_prot):
     first_lines = '#include "martini_v2.2.itp" \n#include "martini_v2.0_lipids.itp" \n#include "martini_v2.0_ions.itp"\n'
 
     with open(cg_topol) as fin:
         cg_lines = fin.readlines()
     new_cg_lines = []
+
     for i in range(0, len(cg_lines)):
         if '"martini.itp"' in cg_lines[i]:
             pass
+        elif 'number' in cg_lines[i]:
+            new_cg_lines.append(cg_lines[i])
+            for j in range(i + 1, len(cg_lines)):
+                if 'Protein_' in cg_lines[j]:
+                    prot_line = cg_lines[j].split()
+                    prot_line[-1] = total_prot
+                    prot_line = prot_line[0] + "   " + str(prot_line[1]) + '\n'
+                    print prot_line
+                    new_cg_lines.append(prot_line)
+            break
         else:
             new_cg_lines.append(cg_lines[i])
 
@@ -175,7 +186,6 @@ def make_topology(cg_topol, system_top):
         fout.write(first_lines)
         for line in new_cg_lines:
             fout.write(line)
-        fout.write('\n')
         for line in new_sys_lines:
             fout.write(line)
 
