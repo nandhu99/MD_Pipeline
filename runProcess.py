@@ -80,13 +80,7 @@ def multiplyProtein(all_flags, cg_protein):
 
     return True
 
-    run_genconf = gmx
-    genconf - f
-    protein.pdb - o
-    multiprot.gro - nbox
-    3
-    3
-    1
+    run_genconf = gmx genconf - f  protein.pdb - o    multiprot.gro - nbox    3    3    1
     os.system(run_genconf)
     return multi_prot
 
