@@ -45,14 +45,26 @@ def runMaritinize(all_flags, clean_pdb, dssp_file):
     return cg_protein, cg_topol, cg_index, nmap
 
 
-'''
-
-def multiplyProtein(all_flags, clean_pdb):
+def multiplyProtein(all_flags, cg_protein):
     import protein_dimensions
-    protein_dim_temp = protein_dimensions.box_dimension(clean_pdb)
-    x_dim = protein_dim_temp[1]
-    y_dim = protein_dim_temp[2]
-    z_dim = protein_dim_temp[3]
+    center_prot = protein_dimensions.box_dimension(cg_protein)
+    with open(center_prot) as fin:
+        lines = fin.readlines()
+        for line in lines:
+            if line[0:6] == 'CRYST1':
+                x_dim = float(line[7:15]) / 10
+                y_dim = float(line[16:24]) / 10
+                z_dim = float(line[25:33]) / 10
+            else:
+                pass
+        fin.close()
+    protein_box = '%9.3f' % (x_dim) + '%9.3f' % (y_dim) + '%9.3f' % (z_dim)
+    print protein_box
+
+
+    return protein_box
+
+    '''
     multi_flags = {}
     for option in all_flags:
         if option[0] == 'multiProt_options':
@@ -61,28 +73,29 @@ def multiplyProtein(all_flags, clean_pdb):
                 t[1] = t[1].strip()
                 multi_flags[t[0]] = t[1]
 
-    new_x_dim = []
-    new_y_dim = []
-    new_z_dim = []
-
     for key in multi_flags:
         if key == '-x_num':
-            for i in range (0,len(x_dim)):
+            for i in range(0, len(x_dim)):
                 new_x = float(x_dim[i])
 
     return True
 
-
-
-    run_genconf = gmx genconf -f protein.pdb -o multiprot.gro -nbox 3 3 1
+    run_genconf = gmx
+    genconf - f
+    protein.pdb - o
+    multiprot.gro - nbox
+    3
+    3
+    1
     os.system(run_genconf)
     return multi_prot
-'''
+
+    '''
 
 
 def runInsane(all_flags, clean_pdb, cg_protein, cg_topol):
     import protein_dimensions
-    protein_dim = protein_dimensions.box_dimension(clean_pdb)
+    protein_dim = protein_dimensions.box_dimension(cg_protein)
 
     sane_flags = {}
     for option in all_flags:
