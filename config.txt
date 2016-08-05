@@ -94,13 +94,13 @@
 ###########################
 
 ### number of protein copies in x direction ### (default 1)
-;-x_num = 1
+-x_num = 3
 
 ### number of protein copies in y direction ### (default 1)
-;-y_num = 1
+-y_num = 3
 
 ### distance between the copies ### (default 10 nm)
-;-dist = 10
+-d = 5
 
 ###########################
 #end_multiProt_options
@@ -116,11 +116,11 @@
 # PBC type: hexagonal, rectangular, square, cubic, optimal or keep
 -pbc = square
 # X dimension or first lattice vector of system (nm)
--x = 15
+-x = 70
 # Y dimension or first lattice vector of system (nm)
--y = 15
+-y = 70
 # Z dimension or first lattice vector of system (nm)
--z = 15
+-z = 20
 # Distance between periodic images (nm)
 ;-d = 0
 #  Z distance between periodic images (nm)
@@ -130,9 +130,9 @@
 ###  Membrane/lipid related options  ###
 
 # Lipid type and relative abundance (NAME[:#]) (use multiple -l to define different lipid mixtures)
--l = DPPC:50 POPC:50 CHOL:10
+-l = DPPC:50 POPC:50
 Lipid type and relative abundance (NAME[:#]) (use multiple -u to define different lipid mixtures)
--u = DPPC:50 POPC:50 CHOL:10
+-u = DPPC:50 POPC:50
 
 # Area per lipid (nm*nm)
 ;-a =
@@ -155,9 +155,9 @@ Lipid type and relative abundance (NAME[:#]) (use multiple -u to define differen
 # Center the protein on z
 -center = True
 # Orient protein in membrane
-;-orient = False
+-orient = False
 # Rotate protein (random|princ|angle(float))
--rotate = princ
+;-rotate = princ
 # Grid spacing for determining orientation
 ;-od =
 # Hydrophobic ratio power for determining orientation
@@ -165,7 +165,7 @@ Lipid type and relative abundance (NAME[:#]) (use multiple -u to define differen
 # Fudge factor for allowing lipid-protein overlap
 ;-fudge =
 #  Put lipids inside the protein (use it only if using multiple proteins as input protein)
-;-ring =
+-ring =
 # Shift protein with respect to membrane
 ;-dm =
 

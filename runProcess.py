@@ -2,6 +2,8 @@ import os
 
 import preprocess
 
+import protein_dimensions
+
 
 def runPreProcess(all_flags):
     for option in all_flags:
@@ -46,25 +48,21 @@ def runMaritinize(all_flags, clean_pdb, dssp_file):
 
 
 def multiplyProtein(all_flags, cg_protein):
-    import protein_dimensions
-    center_prot = protein_dimensions.box_dimension(cg_protein)
-    with open(center_prot) as fin:
+    box_protein = protein_dimensions.box_dimension(cg_protein)
+    with open(box_protein) as fin:
         lines = fin.readlines()
-        for line in lines:
-            if line[0:6] == 'CRYST1':
-                x_dim = float(line[7:15]) / 10
-                y_dim = float(line[16:24]) / 10
-                z_dim = float(line[25:33]) / 10
-            else:
-                pass
-        fin.close()
-    protein_box = '%9.3f' % (x_dim) + '%9.3f' % (y_dim) + '%9.3f' % (z_dim)
-    print protein_box
 
+    x_dim, y_dim, z_dim = 0, 0, 0
 
-    return protein_box
+    for line in lines:
+        if line[0:6] == 'CRYST1':
+            x_dim = float(line[7:15]) / 10
+            y_dim = float(line[16:24]) / 10
+            z_dim = float(line[25:33]) / 10
+        else:
+            pass
+    protein_box = [x_dim, y_dim, z_dim]
 
-    '''
     multi_flags = {}
     for option in all_flags:
         if option[0] == 'multiProt_options':
@@ -73,24 +71,15 @@ def multiplyProtein(all_flags, cg_protein):
                 t[1] = t[1].strip()
                 multi_flags[t[0]] = t[1]
 
-    for key in multi_flags:
-        if key == '-x_num':
-            for i in range(0, len(x_dim)):
-                new_x = float(x_dim[i])
+    multi_prot = cg_protein[:-4] + '_copies.gro'
 
-    return True
-
-    run_genconf = gmx genconf - f  protein.pdb - o    multiprot.gro - nbox    3    3    1
+    run_genconf = 'gmx genconf -f ' + box_protein + ' -o ' + multi_prot + ' -nbox ' + multi_flags['-x_num'] + ' ' + \
+                  multi_flags['-y_num'] + ' ' + ' 1  -dist ' + multi_flags['-d']
     os.system(run_genconf)
-    return multi_prot
-
-    '''
+    return protein_box, multi_prot
 
 
-def runInsane(all_flags, clean_pdb, cg_protein, cg_topol):
-    import protein_dimensions
-    protein_dim = protein_dimensions.box_dimension(cg_protein)
-
+def runInsane(all_flags, clean_pdb, multi_prot, protein_box):
     sane_flags = {}
     for option in all_flags:
         if option[0] == 'insane_options':
@@ -113,11 +102,17 @@ def runInsane(all_flags, clean_pdb, cg_protein, cg_topol):
         if key == '-z':
             insane_dim.append(float(sane_flags[key]))
 
+
+    with open (multi_prot) as fin:
+        lines = fin.readlines()
+    new_box_size = lines[-1].split()
+
+
     for i in range(0, len(insane_dim)):
-        if protein_dim[i] > insane_dim[i]:
+        if float(new_box_size[i]) > insane_dim[i]:
             print "Error in specified insane dimensions"
             print "Protein is bigger than box"
-            print "protein dim: ", protein_dim
+            print "protein dim: ", new_box_size
             print "insane dim : ", insane_dim
             return False
 
@@ -135,7 +130,8 @@ def runInsane(all_flags, clean_pdb, cg_protein, cg_topol):
 
     system = clean_pdb[:-4] + '_inMemb.gro'
     system_top = clean_pdb[:-4] + '_inMemb.top'
-    insane_flags = insane_flags + ' -f ' + cg_protein + ' -o ' + system + ' -p ' + system_top
+
+    insane_flags = insane_flags + ' -f ' + multi_prot + ' -o ' + system + ' -p ' + system_top
     run_insane = 'python insane.py ' + insane_flags
     os.system(run_insane)
     return True, system, system_top, lipids
