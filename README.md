@@ -15,12 +15,19 @@ Preprocessing PDB file & making DSSP file
 
 3. runprocess.py
 --> convert ATM to CG protein using martinize script
+
 --> make protien box using protein_dimensions.py
+
 --> make protein copies using genconf (gromacs)
+
 --> make CG membrane and memb-prot system using insane script
+
 --> make index using make_ndx (gromacs)
+
 --> make final topology (topol.top)
+
 --> energy minimization
+
 --> isothermic-isobaric equilibration
 
 --------------------------------------------------------------------------------
