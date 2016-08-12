@@ -3,7 +3,7 @@
 ###########################
 
 # Give a PDB file for processing/cleaning (mandatory)
--protein = 5azd.pdb
+-protein = 3wmg.pdb
 
 ###########################
 #end_preprocess_options
@@ -100,7 +100,7 @@
 -y_num = 2
 
 ### distance between the copies ### (default 10 nm)
--d = 10
+-d = 5
 
 ###########################
 #end_multiProt_options
@@ -116,9 +116,9 @@
 # PBC type: hexagonal, rectangular, square, cubic, optimal or keep
 -pbc = square
 # X dimension or first lattice vector of system (nm)
--x = 70
+-x = 50
 # Y dimension or first lattice vector of system (nm)
--y = 70
+-y = 50
 # Z dimension or first lattice vector of system (nm)
 -z = 20
 # Distance between periodic images (nm)

@@ -1,4 +1,5 @@
 import os
+import sys
 
 import preprocess
 import protein_dimensions
@@ -11,7 +12,8 @@ def runPreProcess(all_flags):
             t[0] = t[0].strip()
             t[1] = t[1].strip()
             if t[0] == '-protein' or 'protein' in t[0]:
-                clean_file = preprocess.clean_pdb(t[1])
+                base_dir = os.path.dirname(os.path.abspath(sys.argv[0]))
+                clean_file = preprocess.pdbpqr(base_dir, t[1])
                 dssp_out = preprocess.runDSSP(clean_file)
                 return clean_file, dssp_out
     return False, False
@@ -60,6 +62,7 @@ def multiplyProtein(all_flags, cg_protein):
             z_dim = float(line[25:33]) / 10
         else:
             pass
+
     protein_box = [x_dim, y_dim, z_dim]
 
     multi_flags = {}
@@ -144,11 +147,11 @@ def make_ndx(system, lipids):
         ndx_flags = ndx_flags + ' ' + lipid[0]
     system_ndx = system[:-4] + '.ndx'
     index = 'gmx make_ndx -f ' + system + ' -o ' + system_ndx + ' <<EOF\n 1 | r ' + ndx_flags + ' \n 11  &  !  r ' + ndx_flags + ' \n  q \n EOF'
-    # os.system(index)
+    os.system(index)
     return system_ndx
 
 
-def make_topology(cg_topol, system_top, total_prot):
+def make_topology(clean_pdb, cg_topol, system_top, total_prot):
     first_lines = '#include "martini_v2.2.itp" \n#include "martini_v2.0_lipids.itp" \n#include "martini_v2.0_ions.itp"\n'
 
     with open(cg_topol) as fin:
@@ -165,7 +168,6 @@ def make_topology(cg_topol, system_top, total_prot):
                     prot_line = cg_lines[j].split()
                     prot_line[-1] = total_prot
                     prot_line = prot_line[0] + "   " + str(prot_line[1]) + '\n'
-                    print prot_line
                     new_cg_lines.append(prot_line)
             break
         else:
@@ -181,7 +183,7 @@ def make_topology(cg_topol, system_top, total_prot):
                 new_sys_lines.append(sys_lines[j])
             break
 
-    topology = 'topol.top'
+    topology = clean_pdb[:-4]+'.top'
     with open(topology, 'w') as fout:
         fout.write(first_lines)
         for line in new_cg_lines:
@@ -213,7 +215,7 @@ def runMinimization(all_flags, system, topology, system_ndx):
     em_gro = system[:-4] + '_EM.gro'
     em_tpr = system[:-4] + '_EM.tpr'
 
-    run_em_grompp = 'gmx grompp -f ' + em_mdp + ' -c ' + system + ' -p ' + topology + ' -n ' + system_ndx + ' -o ' + em_tpr
+    run_em_grompp = 'gmx grompp -f ' + em_mdp + ' -c ' + system + ' -p ' + topology + ' -n ' + system_ndx + ' -o ' + em_tpr + ' -maxwarn 1'
     os.system(run_em_grompp)
     run_em_mdrun = 'gmx mdrun -ntmpi 1 -ntomp 4  -s ' + em_tpr + ' -v -deffnm ' + system[:-4] + '_EM'
     os.system(run_em_mdrun)
