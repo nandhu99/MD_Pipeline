@@ -4,7 +4,7 @@ import subprocess
 import sys
 
 
-def filter_missing_backbone(pdb_in, pdb_out):
+def fix_missing_BB(pdb_in, pdb_out):
     f = open(pdb_in, 'r')
     lines = f.readlines()
     f.close()
@@ -56,7 +56,7 @@ def filter_missing_backbone(pdb_in, pdb_out):
     f.close()
 
 
-def cd1_to_cd(in_pdb, out_pdb):
+def fix_ILE(in_pdb, out_pdb):
     with open(in_pdb) as in_f, open(out_pdb, 'w') as out_f:
         for line in in_f:
             if line.startswith('ATOM  '):
@@ -67,37 +67,34 @@ def cd1_to_cd(in_pdb, out_pdb):
             out_f.write(line)
 
 
-def libmol_norm(in_pdb, out_pdb):
+def gromos_norm(in_pdb, out_pdb):
     resis = dict(ALA=['N', 'H', 'CA', 'CB', 'C', 'O'],
-                 ARG=['N', 'H', 'CA', 'CB', 'CG', 'CD', 'NE', 'HE', 'CZ', 'NH1', 'HH11', 'HH12', 'NH2', 'HH21', 'HH22',
-                      'C', 'O'],
-                 ARN=['N', 'H', 'CA', 'CB', 'CG', 'CD', 'NE', 'HE', 'CZ', 'NH1', 'HH11', 'HH12', 'NH2', 'HH21', 'C',
-                      'O'],
+                 ARG=['N', 'H', 'CA', 'CB', 'CG', 'CD', 'NE', 'HE', 'CZ', 'NH1', 'HH11', 'HH12', 'NH2', 'HH21', 'HH22', 'C', 'O'],
+                 ARGN=['N', 'H', 'CA', 'CB', 'CG', 'CD', 'NE', 'HE', 'CZ', 'NH1', 'HH11', 'HH12', 'NH2', 'HH21', 'C', 'O'],
                  ASN=['N', 'H', 'CA', 'CB', 'CG', 'OD1', 'ND2', 'HD21', 'HD22', 'C', 'O'],
                  ASP=['N', 'H', 'CA', 'CB', 'CG', 'OD1', 'OD2', 'C', 'O'],
-                 ASH=['N', 'H', 'CA', 'CB', 'CG', 'OD1', 'OD2', 'HD2', 'C', 'O'],
+                 ASPH=['N', 'H', 'CA', 'CB', 'CG', 'OD1', 'OD2', 'HD2', 'C', 'O'],
                  CYS=['N', 'H', 'CA', 'CB', 'SG', 'C', 'O'],
+                 CYSH=['N', 'H', 'CA', 'CB', 'SG', 'HG', 'C', 'O'],
                  GLN=['N', 'H', 'CA', 'CB', 'CG', 'CD', 'OE1', 'NE2', 'HE21', 'HE22', 'C', 'O'],
                  GLU=['N', 'H', 'CA', 'CB', 'CG', 'CD', 'OE1', 'OE2', 'C', 'O'],
-                 GLH=['N', 'H', 'CA', 'CB', 'CG', 'CD', 'OE1', 'OE2', 'HE2', 'C', 'O'],
+                 GLUH=['N', 'H', 'CA', 'CB', 'CG', 'CD', 'OE1', 'OE2', 'HE2', 'C', 'O'],
                  GLY=['N', 'H', 'CA', 'C', 'O'],
-                 HIS=['N', 'H', 'CA', 'CB', 'CG', 'ND1', 'HD1', 'CD2', 'NE2', 'CE1', 'C', 'O'],
-                 HID=['N', 'H', 'CA', 'CB', 'CG', 'ND1', 'HD1', 'CD2', 'NE2', 'CE1', 'C', 'O'],
-                 HIP=['N', 'H', 'CA', 'CB', 'CG', 'CD2', 'ND1', 'HD1', 'CE1', 'NE2', 'HE2', 'C', 'O'],
-                 HIE=['N', 'H', 'CA', 'CB', 'CG', 'ND1', 'CE1', 'CD2', 'NE2', 'HE2', 'C', 'O'],
-                 ILE=['N', 'H', 'CA', 'CB', 'CG2', 'CG1', 'CD', 'C', 'O'],
+                 HIS=['N', 'H', 'CA', 'CB', 'CG', 'ND1', 'HD1', 'CD2', 'HD2', 'CE1', 'HE1', 'NE2', 'C', 'O'],
+                 HISA=['N', 'H', 'CA', 'CB', 'CG', 'ND1', 'HD1', 'CD2', 'HD2', 'CE1', 'HE1', 'NE2', 'C', 'O'],
+                 HISB=['N', 'H', 'CA', 'CB', 'CG', 'ND1', 'CD2', 'HD2', 'CE1', 'HE1', 'NE2', 'HE2', 'C', 'O'],
+                 HISH=['N', 'H', 'CA', 'CB', 'CG', 'ND1', 'HD1', 'CD2', 'HD2', 'CE1', 'HE1', 'NE2', 'HE2', 'C', 'O'],
+                 ILE=['N', 'H', 'CA', 'CB', 'CG1', 'CG2', 'CD', 'C', 'O'],
                  LEU=['N', 'H', 'CA', 'CB', 'CG', 'CD1', 'CD2', 'C', 'O'],
-                 LYS=['N', 'H', 'CA', 'CB', 'CG', 'CD', 'CE', 'NZ', 'HZ1', 'HZ2', 'HZ3', 'C', 'O'],
-                 LYN=['N', 'H', 'CA', 'CB', 'CG', 'CD', 'CE', 'NZ', 'HZ1', 'HZ2', 'C', 'O'],
+                 LYSH=['N', 'H', 'CA', 'CB', 'CG', 'CD', 'CE', 'NZ', 'HZ1', 'HZ2', 'HZ3', 'C', 'O'],
+                 LYS=['N', 'H', 'CA', 'CB', 'CG', 'CD', 'CE', 'NZ', 'HZ1', 'HZ2', 'C', 'O'],
                  MET=['N', 'H', 'CA', 'CB', 'CG', 'SD', 'CE', 'C', 'O'],
-                 MSE=['N', 'H', 'CA', 'CB', 'CG', 'SE', 'CE', 'C', 'O'],
-                 PHE=['N', 'H', 'CA', 'CB', 'CG', 'CD1', 'CD2', 'CE1', 'CE2', 'CZ', 'C', 'O'],
-                 PRO=['N', 'CD', 'CA', 'CB', 'CG', 'C', 'O'],
+                 PHE=['N', 'H', 'CA', 'CB', 'CG', 'CD1', 'HD1', 'CD2', 'HD2', 'CE1', 'HE1', 'CE2', 'HE2', 'CZ', 'HZ', 'C', 'O'],
+                 PRO=['N', 'CA', 'CB', 'CG', 'CD', 'C', 'O'],
                  SER=['N', 'H', 'CA', 'CB', 'OG', 'HG', 'C', 'O'],
                  THR=['N', 'H', 'CA', 'CB', 'OG1', 'HG1', 'CG2', 'C', 'O'],
-                 TRP=['N', 'H', 'CA', 'CB', 'CG', 'CD2', 'CE2', 'CE3', 'CD1', 'NE1', 'HE1', 'CZ2', 'CZ3', 'CH2', 'C',
-                      'O'],
-                 TYR=['N', 'H', 'CA', 'CB', 'CG', 'CD1', 'CD2', 'CE1', 'CE2', 'CZ', 'OH', 'HH', 'C', 'O'],
+                 TRP=['N', 'H', 'CA', 'CB', 'CG', 'CD1', 'HD1', 'CD2', 'NE1', 'HE1', 'CE2', 'CE3', 'HE3', 'CZ2', 'HZ2', 'CZ3', 'HZ3', 'CH2', 'HH2', 'C', 'O'],
+                 TYR=['N', 'H', 'CA', 'CB', 'CG', 'CD1', 'HD1', 'CD2', 'HD2', 'CE1', 'HE1', 'CE2', 'HE2', 'CZ', 'OH', 'HH', 'C', 'O'],
                  VAL=['N', 'H', 'CA', 'CB', 'CG1', 'CG2', 'C', 'O']
                  )
     atoms = []
@@ -151,12 +148,12 @@ def pdbpqr(base_dir, pdb):
     outmol = pdb_prefix + "_pmin.mol.pdb"
     outmol2 = pdb_prefix + "_pmin.mol2.pdb"
 
-    filter_missing_backbone(pdb, genout)
+    fix_missing_BB(pdb, genout)
     with open('error_log', 'a') as err_out, open('output_log', 'a') as out_f:
         subprocess.call([base_dir + '/pdb2pqr/pdb2pqr.py', '--nodebump', '--noopt', '--mol_charmm_pdb', '--chain',
                          '--ff=LIBMOL', '--ffout=LIBMOL', genout, pqr], stdout=out_f, stderr=err_out)
-    cd1_to_cd(outmol, outmol2)
-    libmol_norm(outmol2, nonminout)
+    fix_ILE(outmol, outmol2)
+    gromos_norm(outmol2, nonminout)
 
     os.unlink(genout)
     os.unlink(pqr)
