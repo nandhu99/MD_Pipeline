@@ -1,4 +1,9 @@
 def box_dimension(filename):
+    """
+    This function centers the protein and then calculates the protein box dimensions
+    :param filename: clean pdb file
+    :return: protein with a box is returned
+    """
     import numpy as np
     with open(filename) as fin:
         lines = fin.readlines()

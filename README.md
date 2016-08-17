@@ -11,6 +11,7 @@ automise coarse grained simulations of membrane-protein systems.
 Parsing the config.txt file for input options 
 
 2. preprocess.py
+Orienting proteins for embedding in membrane is implemented 
 Preprocessing PDB file & making DSSP file
 
 3. runprocess.py

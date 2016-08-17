@@ -6,6 +6,11 @@ import protein_dimensions
 
 
 def runMemembed(all_flags):
+    """
+    This function runs memembed program to orient protein in a membrane environment.
+    :param all_flags: preprocess parameters read from 'config.txt'
+    :return: returns the protein file that is oriented for a membrane system.
+    """
     mem_flags = {}
     for option in all_flags:
         if option[0] == 'preprocess_options':
@@ -46,13 +51,26 @@ def runMemembed(all_flags):
 
 
 def runPreProcess(orient_protein):
+    """
+    This function calls the preprocess to make a clean pdb file
+    It also generates a dssp file
+    :param orient_protein: protein from runMemembed function
+    :return: a clean pdb file & a dssp file
+    """
     base_dir = os.path.dirname(os.path.abspath(sys.argv[0]))
-    clean_file = preprocess.pdbpqr(base_dir, orient_protein)
-    dssp_out = preprocess.runDSSP(clean_file)
-    return clean_file, dssp_out
+    clean_pdb = preprocess.pdbpqr(base_dir, orient_protein)
+    dssp_file = preprocess.runDSSP(clean_pdb)
+    return clean_pdb, dssp_file
 
 
 def runMaritinize(all_flags, clean_pdb, dssp_file):
+    """
+    This function runs martinize to convert atomistic protein to coarse-grained protein
+    :param all_flags: martinize parameters read from 'config.txt'
+    :param clean_pdb: oriented protein with only ATOM in pdb
+    :param dssp_file: dssp file for defining secondary structures
+    :return: martinized/coarse-grained protein (.pdb), coarse-grained topology, coarse-grained index & mapping file
+    """
     mar_flags = {}
     for option in all_flags:
         if option[0] == 'martinize_options':
@@ -82,6 +100,13 @@ def runMaritinize(all_flags, clean_pdb, dssp_file):
 
 
 def multiplyProtein(all_flags, cg_protein):
+    """
+    This function makes multiple copies of the coarse-grained protein in x-y plane
+    :param all_flags: multiply protein parameters from 'config.txt'
+    :param cg_protein: coarse-grained protein (.pdb)
+    :return: returns a (.gro) coarse-grained protein file with multiple copies of protein along x-y plane
+    :return: also returns, the protein box dimensions [x, y, z] & total number of protein copies
+    """
     box_protein = protein_dimensions.box_dimension(cg_protein)
     with open(box_protein) as fin:
         lines = fin.readlines()
@@ -114,10 +139,18 @@ def multiplyProtein(all_flags, cg_protein):
 
     total_prot = int(multi_flags['-x_num']) * int(multi_flags['-y_num'])
 
-    return protein_box, multi_prot, total_prot
+    return multi_prot, protein_box, total_prot
 
 
 def runInsane(all_flags, clean_pdb, multi_prot, protein_box):
+    """
+    This function runs insane to make a coarse-grained membrane-protein system
+    :param all_flags: insane parameters read from 'config.txt'
+    :param clean_pdb: protein file name
+    :param multi_prot: coarse-grained multiple protein file
+    :param protein_box: protein box dimension
+    :return: coarse-grained membrane-protein system, topology file, name & number of all lipids
+    """
     sane_flags = {}
     for option in all_flags:
         if option[0] == 'insane_options':
@@ -174,6 +207,12 @@ def runInsane(all_flags, clean_pdb, multi_prot, protein_box):
 
 
 def make_ndx(system, lipids):
+    """
+    this function makes index file: protein_lipids & sol_ions
+    :param system: membrane-protein system
+    :param lipids: names & no:of lipids
+    :return: makes a gromacs index file (.ndx)
+    """
     ndx_flags = ''
     for lipid in lipids:
         lipid = lipid.split(':')
@@ -185,6 +224,14 @@ def make_ndx(system, lipids):
 
 
 def make_topology(clean_pdb, cg_topol, system_top, total_prot):
+    """
+    This function combines the topologies from martinize and insane and makes a topology that can be used for energy minimization
+    :param clean_pdb:  protein file name
+    :param cg_topol: topology from martinize
+    :param system_top: topology from insane
+    :param total_prot: total number of protein copies
+    :return: Final topology file with correct itp files and number of molecules
+    """
     first_lines = '#include "martini_v2.2.itp" \n#include "martini_v2.0_lipids.itp" \n#include "martini_v2.0_ions.itp"\n'
 
     with open(cg_topol) as fin:
@@ -228,6 +275,14 @@ def make_topology(clean_pdb, cg_topol, system_top, total_prot):
 
 
 def runMinimization(all_flags, system, topology, system_ndx):
+    """
+    This function does gromacs energy minimization
+    :param all_flags: energy minimization mdp parameters read from 'config.txt'
+    :param system: membrane-protein system
+    :param topology: final topology
+    :param system_ndx: gromacs index file
+    :return: energy minimized gro file for next step
+    """
     em_flags = {}
     for option in all_flags:
         if option[0] == 'energy_min_options':
@@ -253,10 +308,19 @@ def runMinimization(all_flags, system, topology, system_ndx):
     run_em_mdrun = 'gmx mdrun -ntmpi 1 -ntomp 4  -s ' + em_tpr + ' -v -deffnm ' + system[:-4] + '_EM'
     # os.system(run_em_mdrun)
 
-    return em_gro
+    return em_gro, em_tpr
 
 
 def runEquilibration(all_flags, system, em_gro, topology, system_ndx):
+    """
+    This function does gromacs equilibration
+    :param all_flags:  equilibration mdp parameters read from 'config.txt'
+    :param system: membrane-protein system
+    :param em_gro: energy minimized system
+    :param topology: final topology
+    :param system_ndx: gromacs index file
+    :return: equilibrated gro file
+    """
     groups = []
     with open(system_ndx) as fin:
         lines = fin.readlines()
@@ -296,4 +360,4 @@ def runEquilibration(all_flags, system, em_gro, topology, system_ndx):
     run_equil_mdrun = 'gmx mdrun -ntmpi 1 -ntomp 4  -s ' + equil_tpr + ' -v -deffnm ' + system[:-4] + '_EQUIL'
     os.system(run_equil_mdrun)
 
-    return equil_gro
+    return equil_gro, equil_tpr

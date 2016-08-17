@@ -1,5 +1,10 @@
-def parseConfig2(filename):
-    with open(filename) as fin:
+def parseConfig2(config):
+    """
+    This function reads the 'config.txt' and parses to each sub functions in runProcess
+    :param config: config.txt file
+    :return: parameters as key-value
+    """
+    with open(config) as fin:
         lines = fin.readlines()
     options = []
     no_of_lines = len(lines)

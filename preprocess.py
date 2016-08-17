@@ -4,6 +4,12 @@ import sys
 
 
 def fix_missing_BB(pdb_in, pdb_out):
+    """
+    This function fixes the protein for missing backbone atoms
+    :param pdb_in: oriented protein pdb file
+    :param pdb_out: protein with all backbone atoms fixed
+    :return: True
+    """
     f = open(pdb_in, 'r')
     lines = f.readlines()
     f.close()
@@ -53,9 +59,16 @@ def fix_missing_BB(pdb_in, pdb_out):
     for atom in good_atoms:
         f.write(atom['line'])
     f.close()
+    return True
 
 
 def fix_ILE(in_pdb, out_pdb):
+    """
+    This function renames the carbon CD1 to CD in ILE aminoacid for gromos compatible
+    :param in_pdb: takes the pdb2pqr processed pdb file
+    :param out_pdb: CD fixed protein file
+    :return:
+    """
     with open(in_pdb) as in_f, open(out_pdb, 'w') as out_f:
         for line in in_f:
             if line.startswith('ATOM  '):
@@ -64,9 +77,16 @@ def fix_ILE(in_pdb, out_pdb):
                 if residue_name == 'ILE' and atom_name == 'CD1':
                     line = line[:12] + ' CD ' + line[16:]
             out_f.write(line)
+    return True
 
 
 def gromos_residues(in_pdb, out_pdb):
+    """
+    This function fixes the atom names for amino acids
+    :param in_pdb: CD fixed protein file
+    :param out_pdb: protein with atom names fixed
+    :return:
+    """
     resis = dict(ALA=['N', 'H', 'CA', 'CB', 'C', 'O'],
                  ARG=['N', 'H', 'CA', 'CB', 'CG', 'CD', 'NE', 'HE', 'CZ', 'NH1', 'HH11', 'HH12', 'NH2', 'HH21', 'HH22',
                       'C', 'O'],
@@ -141,8 +161,19 @@ def gromos_residues(in_pdb, out_pdb):
                         atom_i += 1
                         break
 
+    return True
+
 
 def pdbpqr(base_dir, pdb):
+    """
+    This function runs pdb2pqr script to process pdb file.
+    First fixes the protein backbone, then process pdb using pdbpqr,
+    next changes the CD1 to CD in ILE,
+    then renames atom names for gromos compatiblity
+    :param base_dir: present working directory
+    :param pdb: oriented protein file as input from 'config.txt'
+    :return: processed clean protein pdb file
+    """
     pdb_prefix = pdb[:-11]
 
     genout = pdb_prefix + "_pgen.pdb"
@@ -168,9 +199,14 @@ def pdbpqr(base_dir, pdb):
     return gromos_pdb
 
 
-def runDSSP(filename):
+def runDSSP(clean_pdb):
+    """
+    This function assigns secondary structure for the protein
+    :param clean_pdb: clean protein from pdb2pqr processing
+    :return: dssp file for the protein
+    """
     do_dssp = './dssp  '
-    infile = filename
+    infile = clean_pdb
     out_dssp = infile[:-4] + ".dssp"
     run_cmd = do_dssp + infile + " " + out_dssp
     os.system(run_cmd)
