@@ -2,8 +2,30 @@
 #preprocess_options
 ###########################
 
-# Give a PDB file for processing/cleaning (mandatory)
--protein = 3wmg.pdb
+# Give a PDB file for orienting/processing/cleaning (mandatory)
+-protein = 5a44.pdb
+
+### orienting protein in lipid ###
+
+# Comma seperated list of helix boundaries used to calculate helix tilt angles (Eg: 4-26,46,68)
+;-t =
+# Comma seperated list of residues to skip
+;-f =
+# Threads to use
+;-a = 1
+# Search type. 0 = Genetic algorithm, 1 = Grid, 2 = Direct, 3 = GA repeated 5 times. (Default 0)
+-s = 3
+# Optimise membrane thickness. 0 = Do not optimise, 1 = After orientation, 2 = Do not orientate. (Default 0)
+;-q =
+# Location of N-terminal (first residue of first chain)(in | out)
+-n = in
+# Target is a beta-barrel
+;-b = False
+# Force target to span membrane
+;-l =False
+# Draw lines representing polar head groups
+;-p = False
+
 
 ###########################
 #end_preprocess_options
@@ -116,11 +138,11 @@
 # PBC type: hexagonal, rectangular, square, cubic, optimal or keep
 -pbc = square
 # X dimension or first lattice vector of system (nm)
--x = 50
+-x = 20
 # Y dimension or first lattice vector of system (nm)
--y = 50
+-y = 20
 # Z dimension or first lattice vector of system (nm)
--z = 20
+-z = 15
 # Distance between periodic images (nm)
 ;-d = 0
 #  Z distance between periodic images (nm)
@@ -154,10 +176,16 @@ Lipid type and relative abundance (NAME[:#]) (use multiple -u to define differen
 
 # Center the protein on z
 -center = True
+
+### Orienting the protein in the membrane is done in the first step using memembed program ###
+#
 # Orient protein in membrane
--orient = False
+#;-orient = True
 # Rotate protein (random|princ|angle(float))
-;-rotate = princ
+#;-rotate = princ
+#
+### Hence it is not recommemnded to use the -orient and -rotate options while running insane ###
+
 # Grid spacing for determining orientation
 ;-od =
 # Hydrophobic ratio power for determining orientation

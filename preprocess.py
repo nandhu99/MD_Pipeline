@@ -1,6 +1,5 @@
 import os
 import os.path
-import subprocess
 import sys
 
 
@@ -67,7 +66,7 @@ def fix_ILE(in_pdb, out_pdb):
             out_f.write(line)
 
 
-def gromos_norm(in_pdb, out_pdb):
+def gromos_residues(in_pdb, out_pdb):
     resis = dict(ALA=['N', 'H', 'CA', 'CB', 'C', 'O'],
                  ARG=['N', 'H', 'CA', 'CB', 'CG', 'CD', 'NE', 'HE', 'CZ', 'NH1', 'HH11', 'HH12', 'NH2', 'HH21', 'HH22',
                       'C', 'O'],
@@ -144,32 +143,33 @@ def gromos_norm(in_pdb, out_pdb):
 
 
 def pdbpqr(base_dir, pdb):
-    pdb_prefix = pdb[:-4]
+    pdb_prefix = pdb[:-11]
 
     genout = pdb_prefix + "_pgen.pdb"
     pqr = pdb_prefix + "_pmin.pqr"
-    nonminout = pdb_prefix + "_clean.pdb"
+    gromos_pdb = pdb_prefix + "_clean.pdb"
     outmol = pdb_prefix + "_pmin.mol.pdb"
     outmol2 = pdb_prefix + "_pmin.mol2.pdb"
 
     fix_missing_BB(pdb, genout)
-    with open('error_log', 'a') as err_out, open('output_log', 'a') as out_f:
-        subprocess.call([base_dir + '/pdb2pqr/pdb2pqr.py', '--nodebump', '--noopt', '--mol_charmm_pdb', '--chain',
-                         '--ff=GROMOS', '--ffout=GROMOS', genout, pqr], stdout=out_f, stderr=err_out)
+    #  with open('error_log', 'a') as err_out, open('output_log', 'a') as out_f:
+    run_pdb2pqr = base_dir + '/pdb2pqr/pdb2pqr.py --nodebump --noopt --mol_charmm_pdb --chain --ff=GROMOS --ffout=GROMOS ' + genout + ' ' + pqr
+    # subprocess.call([base_dir + '/pdb2pqr/pdb2pqr.py', '--nodebump', '--noopt', '--mol_charmm_pdb', '--chain', '--ff=GROMOS', '--ffout=GROMOS', genout, pqr], stdout=out_f, stderr=err_out)
+    os.system(run_pdb2pqr)
     fix_ILE(outmol, outmol2)
-    gromos_norm(outmol2, nonminout)
+    gromos_residues(outmol2, gromos_pdb)
 
     os.unlink(genout)
     os.unlink(pqr)
     os.unlink(outmol)
     os.unlink(outmol2)
-    os.unlink('error_log')
-    os.unlink('output_log')
-    return nonminout
+    #  os.unlink('error_log')
+    # os.unlink('output_log')
+    return gromos_pdb
 
 
 def runDSSP(filename):
-    do_dssp = './dssp_exe '
+    do_dssp = './dssp  '
     infile = filename
     out_dssp = infile[:-4] + ".dssp"
     run_cmd = do_dssp + infile + " " + out_dssp

@@ -5,18 +5,51 @@ import preprocess
 import protein_dimensions
 
 
-def runPreProcess(all_flags):
+def runMemembed(all_flags):
+    mem_flags = {}
     for option in all_flags:
         if option[0] == 'preprocess_options':
-            t = option[1]
-            t[0] = t[0].strip()
-            t[1] = t[1].strip()
-            if t[0] == '-protein' or 'protein' in t[0]:
-                base_dir = os.path.dirname(os.path.abspath(sys.argv[0]))
-                clean_file = preprocess.pdbpqr(base_dir, t[1])
-                dssp_out = preprocess.runDSSP(clean_file)
-                return clean_file, dssp_out
-    return False, False
+            for t in option[1:]:
+                t[0] = t[0].strip()
+                t[1] = t[1].strip()
+                if t[1] == '-protein' or 'protein':
+                    pass
+                elif t[1] == 'False' or t[1] == 'false':
+                    pass
+                elif t[1] == 'True' or t[1] == 'true':
+                    mem_flags[t[0]] = ''
+                else:
+                    mem_flags[t[0]] = t[1]
+
+    prot_flag = {}
+    for option in all_flags:
+        if option[0] == 'preprocess_options':
+            for t in option[1:]:
+                t[0] = t[0].strip()
+                t[1] = t[1].strip()
+                if t[1] == '-protein' or 'protein':
+                    prot_flag[t[0]] = t[1]
+                else:
+                    pass
+
+    memembed_flags = ''
+    for key in mem_flags:
+        memembed_flags = memembed_flags + ' ' + key + ' ' + mem_flags[key]
+
+    in_protein = prot_flag['-protein']
+    orient_protein = in_protein[:-4] + '_orient.pdb'
+
+    memembed_flags = memembed_flags + ' -o ' + orient_protein + ' ' + in_protein
+    run_memembed = './memembed ' + memembed_flags
+    os.system(run_memembed)
+    return orient_protein
+
+
+def runPreProcess(orient_protein):
+    base_dir = os.path.dirname(os.path.abspath(sys.argv[0]))
+    clean_file = preprocess.pdbpqr(base_dir, orient_protein)
+    dssp_out = preprocess.runDSSP(clean_file)
+    return clean_file, dssp_out
 
 
 def runMaritinize(all_flags, clean_pdb, dssp_file):
@@ -183,7 +216,7 @@ def make_topology(clean_pdb, cg_topol, system_top, total_prot):
                 new_sys_lines.append(sys_lines[j])
             break
 
-    topology = clean_pdb[:-4]+'.top'
+    topology = clean_pdb[:-4] + '.top'
     with open(topology, 'w') as fout:
         fout.write(first_lines)
         for line in new_cg_lines:
@@ -218,7 +251,7 @@ def runMinimization(all_flags, system, topology, system_ndx):
     run_em_grompp = 'gmx grompp -f ' + em_mdp + ' -c ' + system + ' -p ' + topology + ' -n ' + system_ndx + ' -o ' + em_tpr + ' -maxwarn 1'
     os.system(run_em_grompp)
     run_em_mdrun = 'gmx mdrun -ntmpi 1 -ntomp 4  -s ' + em_tpr + ' -v -deffnm ' + system[:-4] + '_EM'
-    os.system(run_em_mdrun)
+    # os.system(run_em_mdrun)
 
     return em_gro
 
