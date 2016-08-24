@@ -3,7 +3,7 @@
 ###########################
 
 # Give a PDB file for orienting/processing/cleaning (mandatory)
--protein = 5a44.pdb
+-protein = 3qf4.gro
 
 ### orienting protein in lipid ###
 
@@ -14,11 +14,11 @@
 # Threads to use
 ;-a = 1
 # Search type. 0 = Genetic algorithm, 1 = Grid, 2 = Direct, 3 = GA repeated 5 times. (Default 0)
--s = 3
+;-s = 3
 # Optimise membrane thickness. 0 = Do not optimise, 1 = After orientation, 2 = Do not orientate. (Default 0)
 ;-q =
 # Location of N-terminal (first residue of first chain)(in | out)
--n = in
+;-n = in
 # Target is a beta-barrel
 ;-b = False
 # Force target to span membrane
@@ -116,13 +116,13 @@
 ###########################
 
 ### number of protein copies in x direction ### (default 1)
--x_num = 2
+-x_num = 1
 
 ### number of protein copies in y direction ### (default 1)
--y_num = 2
+-y_num = 1
 
 ### distance between the copies ### (default 10 nm)
--d = 5
+-d = 1
 
 ###########################
 #end_multiProt_options
@@ -138,11 +138,11 @@
 # PBC type: hexagonal, rectangular, square, cubic, optimal or keep
 -pbc = square
 # X dimension or first lattice vector of system (nm)
--x = 20
+-x = 10
 # Y dimension or first lattice vector of system (nm)
--y = 20
+-y = 10
 # Z dimension or first lattice vector of system (nm)
--z = 15
+-z = 10
 # Distance between periodic images (nm)
 ;-d = 0
 #  Z distance between periodic images (nm)

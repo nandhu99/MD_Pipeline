@@ -139,10 +139,10 @@ def multiplyProtein(all_flags, cg_protein):
 
     total_prot = int(multi_flags['-x_num']) * int(multi_flags['-y_num'])
 
-    return multi_prot, protein_box, total_prot
+    return multi_prot, total_prot
 
 
-def runInsane(all_flags, clean_pdb, multi_prot, protein_box):
+def runInsane(all_flags, clean_pdb, multi_prot):
     """
     This function runs insane to make a coarse-grained membrane-protein system
     :param all_flags: insane parameters read from 'config.txt'
@@ -179,11 +179,9 @@ def runInsane(all_flags, clean_pdb, multi_prot, protein_box):
 
     for i in range(0, len(insane_dim)):
         if float(new_box_size[i]) > insane_dim[i]:
-            print "Error in specified insane dimensions"
-            print "Protein is bigger than box"
-            print "protein dim: ", new_box_size
-            print "insane dim : ", insane_dim
-            return False
+            print "Protein is bigger than defined box dimensions. Using protein dimensions."
+            insane_dim[i] = new_box_size[i]
+    print "Box_dimensions: " + str(insane_dim)
 
     insane_flags = ''
     lipids = []

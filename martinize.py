@@ -1802,8 +1802,10 @@ class elnedyn22p:
 ## 1 # OPTIONS AND DOCUMENTATION ##  -> @DOC <-
 ###################################
 
-import types, os
-    
+import os
+import types
+
+
 # This is a simple and versatily option class that allows easy
 # definition and parsing of options.
 class Option:
@@ -2046,7 +2048,7 @@ def help():
 ##############################
 ## 2 # COMMAND LINE PARSING ##  -> @CMD <-
 ##############################
-import sys, logging, os, inspect
+import inspect
 
 
 def str2atom(a):
@@ -2246,8 +2248,6 @@ def option_parser(args, options, lists, version=0):
 #################################################
 ## 3 # HELPER FUNCTIONS, CLASSES AND SHORTCUTS ##  -> @FUNC <-
 #################################################
-
-import math
 
 #----+------------------+
 ## A | STRING FUNCTIONS |
@@ -2483,7 +2483,6 @@ def mapIndex(r, ca2bb = False):
 #############################
 ## 5 # SECONDARY STRUCTURE ##  -> @SS <-
 #############################
-import logging, os, sys
 import subprocess as subp
 
 #----+--------------------------------------+
@@ -2500,6 +2499,7 @@ ss_names = {
  "F": "Collagenous Fiber",                                                                  #@#
  "E": "Extended structure (beta sheet)",                                                    #@#
  "H": "Helix structure",                                                                    #@#
+ "G": "310Helix structure",                                                                 #@#
  "1": "Helix start (H-bond donor)",                                                         #@#
  "2": "Helix end (H-bond acceptor)",                                                        #@#
  "3": "Ambivalent helix type (short helices)",                                              #@#
@@ -2662,7 +2662,6 @@ ssDetermination = {
 #########################
 ## 7 # ELASTIC NETWORK ##  -> @ELN <-
 #########################
-import math
 
 ## ELASTIC NETWORK ##
 
@@ -2696,7 +2695,6 @@ def rubberBands(atomList, lowerBound, upperBound, decayFactor, decayPower, force
 #######################
 ## 8 # STRUCTURE I/O ##  -> @IO <-
 #######################
-import logging, math, random, sys
 
 #----+---------+
 ## A | PDB I/O |
@@ -3392,7 +3390,6 @@ class Chain:
 ##################
 ## 7 # TOPOLOGY ##  -> @TOP <-
 ##################
-import logging, math
 
 
 # This is a generic class for Topology Bonded Type definitions
@@ -4330,7 +4327,7 @@ class Topology:
 #############
 ## 8 # MAIN #  -> @MAIN <-
 #############
-import sys, logging, random, math, os, re
+import random, math, os, re
 
 
 def main(options):
