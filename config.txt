@@ -3,7 +3,17 @@
 ###########################
 
 # Give a PDB file for orienting/processing/cleaning (mandatory)
--protein = 3qf4.gro
+-protein = protein.pdb
+
+
+###########################
+#end_preprocess_options
+###########################
+
+
+###########################
+#memembed_options
+###########################
 
 ### orienting protein in lipid ###
 
@@ -12,15 +22,15 @@
 # Comma seperated list of residues to skip
 ;-f =
 # Threads to use
-;-a = 1
+-a = 1
 # Search type. 0 = Genetic algorithm, 1 = Grid, 2 = Direct, 3 = GA repeated 5 times. (Default 0)
-;-s = 3
+-s = 3
 # Optimise membrane thickness. 0 = Do not optimise, 1 = After orientation, 2 = Do not orientate. (Default 0)
 ;-q =
 # Location of N-terminal (first residue of first chain)(in | out)
-;-n = in
+-n = out
 # Target is a beta-barrel
-;-b = False
+;-b = True
 # Force target to span membrane
 ;-l =False
 # Draw lines representing polar head groups
@@ -28,7 +38,7 @@
 
 
 ###########################
-#end_preprocess_options
+#end_memembed_options
 ###########################
 
 
@@ -122,7 +132,7 @@
 -y_num = 1
 
 ### distance between the copies ### (default 10 nm)
--d = 1
+-d = 10
 
 ###########################
 #end_multiProt_options
@@ -138,11 +148,11 @@
 # PBC type: hexagonal, rectangular, square, cubic, optimal or keep
 -pbc = square
 # X dimension or first lattice vector of system (nm)
--x = 10
+-x = 30
 # Y dimension or first lattice vector of system (nm)
--y = 10
+-y = 30
 # Z dimension or first lattice vector of system (nm)
--z = 10
+-z = 30
 # Distance between periodic images (nm)
 ;-d = 0
 #  Z distance between periodic images (nm)
@@ -174,10 +184,10 @@ Lipid type and relative abundance (NAME[:#]) (use multiple -u to define differen
 
 ###  Protein related options ###
 
-# Center the protein on z
--center = True
 
 ### Orienting the protein in the membrane is done in the first step using memembed program ###
+# Center the protein on z
+#;-center = True
 #
 # Orient protein in membrane
 #;-orient = True
@@ -186,6 +196,7 @@ Lipid type and relative abundance (NAME[:#]) (use multiple -u to define differen
 #
 ### Hence it is not recommemnded to use the -orient and -rotate options while running insane ###
 
+
 # Grid spacing for determining orientation
 ;-od =
 # Hydrophobic ratio power for determining orientation
@@ -193,7 +204,7 @@ Lipid type and relative abundance (NAME[:#]) (use multiple -u to define differen
 # Fudge factor for allowing lipid-protein overlap
 ;-fudge =
 #  Put lipids inside the protein (use it only if using multiple proteins as input protein)
--ring =
+-ring = True
 # Shift protein with respect to membrane
 ;-dm =
 

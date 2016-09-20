@@ -1,4 +1,4 @@
-# MD_Pipeline
+# MD_Pipeline v 1.1
 
 md_pipeline.py is a beta testing version of the python script to streamline and 
 automise coarse grained simulations of membrane-protein systems.
@@ -44,9 +44,6 @@ Run python md_pipeline.py
  comments
 --------------------------------------------------------------------------------
 
-This is the first workable version of md_pipeline.py. It is still work-in-progress. Any feedback is appreciated.
-The pipeline has been tested for a number of proteins and membranes.
-Optimal/default mdp paramteres were chosen for energy minimization and equilibration simulations.
-It is users responsibility to obtain the optimal parameters for their simulations.
-
+This verion works for both integral membrane proteins and most of the peripheral protiens.
+The error with making beads for multi-chain proteins(only for some proteins) is yet to be fixed.
 

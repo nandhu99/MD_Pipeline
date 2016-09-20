@@ -80,7 +80,7 @@ def fix_ILE(in_pdb, out_pdb):
     return True
 
 
-def gromos_residues(in_pdb, out_pdb):
+def residues(in_pdb, out_pdb):
     """
     This function fixes the atom names for amino acids
     :param in_pdb: CD fixed protein file
@@ -188,7 +188,7 @@ def pdbpqr(base_dir, pdb):
     # subprocess.call([base_dir + '/pdb2pqr/pdb2pqr.py', '--nodebump', '--noopt', '--mol_charmm_pdb', '--chain', '--ff=GROMOS', '--ffout=GROMOS', genout, pqr], stdout=out_f, stderr=err_out)
     os.system(run_pdb2pqr)
     fix_ILE(outmol, outmol2)
-    gromos_residues(outmol2, gromos_pdb)
+    residues(outmol2, gromos_pdb)
 
     os.unlink(genout)
     os.unlink(pqr)

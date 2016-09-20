@@ -38,9 +38,9 @@ def box_dimension(filename):
         fout.write('\n')
         for line in lines:
             if line[0:4] == 'ATOM':
-                new_x = float(line[30:38]) - Cx
-                new_y = float(line[38:46]) - Cy
-                new_z = float(line[46:54]) - Cz
+                new_x = float(line[30:38])
+                new_y = float(line[38:46])
+                new_z = float(line[46:54])
 
                 new_coors = "%8.3f" % (new_x) + "%8.3f" % (new_y) + "%8.3f" % (new_z)
                 new_outline = line[0:30] + new_coors + line[54:]

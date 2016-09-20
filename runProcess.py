@@ -11,21 +11,6 @@ def runMemembed(all_flags):
     :param all_flags: preprocess parameters read from 'config.txt'
     :return: returns the protein file that is oriented for a membrane system.
     """
-    mem_flags = {}
-    for option in all_flags:
-        if option[0] == 'preprocess_options':
-            for t in option[1:]:
-                t[0] = t[0].strip()
-                t[1] = t[1].strip()
-                if t[1] == '-protein' or 'protein':
-                    pass
-                elif t[1] == 'False' or t[1] == 'false':
-                    pass
-                elif t[1] == 'True' or t[1] == 'true':
-                    mem_flags[t[0]] = ''
-                else:
-                    mem_flags[t[0]] = t[1]
-
     prot_flag = {}
     for option in all_flags:
         if option[0] == 'preprocess_options':
@@ -36,6 +21,19 @@ def runMemembed(all_flags):
                     prot_flag[t[0]] = t[1]
                 else:
                     pass
+
+    mem_flags = {}
+    for option in all_flags:
+        if option[0] == 'memembed_options':
+            for t in option[1:]:
+                t[0] = t[0].strip()
+                t[1] = t[1].strip()
+                if t[1] == 'False' or t[1] == 'false':
+                    pass
+                elif t[1] == 'True' or t[1] == 'true':
+                    mem_flags[t[0]] = ''
+                else:
+                    mem_flags[t[0]] = t[1]
 
     memembed_flags = ''
     for key in mem_flags:
@@ -94,7 +92,7 @@ def runMaritinize(all_flags, clean_pdb, dssp_file):
     nmap = clean_pdb[:-4] + '_map.ndx'
 
     martinize_flags = martinize_flags + ' -f ' + clean_pdb + ' -ss ' + dssp_file + ' -x ' + cg_protein + ' -o ' + cg_topol + ' -n ' + cg_index + ' -nmap ' + nmap
-    run_martinize = 'python martinize.py ' + martinize_flags
+    run_martinize = 'python martinize_TW.py ' + martinize_flags
     os.system(run_martinize)
     return cg_protein, cg_topol, cg_index, nmap
 
@@ -304,7 +302,7 @@ def runMinimization(all_flags, system, topology, system_ndx):
     run_em_grompp = 'gmx grompp -f ' + em_mdp + ' -c ' + system + ' -p ' + topology + ' -n ' + system_ndx + ' -o ' + em_tpr + ' -maxwarn 1'
     os.system(run_em_grompp)
     run_em_mdrun = 'gmx mdrun -ntmpi 1 -ntomp 4  -s ' + em_tpr + ' -v -deffnm ' + system[:-4] + '_EM'
-    # os.system(run_em_mdrun)
+   # os.system(run_em_mdrun)
 
     return em_gro, em_tpr
 
@@ -354,8 +352,8 @@ def runEquilibration(all_flags, system, em_gro, topology, system_ndx):
     equil_tpr = system[:-4] + '_EQUIL.tpr'
 
     run_equil_grompp = 'gmx grompp -f ' + equil_mdp + ' -c ' + em_gro + ' -p ' + topology + ' -n ' + system_ndx + ' -o ' + equil_tpr + ' -maxwarn 10'
-    os.system(run_equil_grompp)
+    #os.system(run_equil_grompp)
     run_equil_mdrun = 'gmx mdrun -ntmpi 1 -ntomp 4  -s ' + equil_tpr + ' -v -deffnm ' + system[:-4] + '_EQUIL'
-    os.system(run_equil_mdrun)
+    #os.system(run_equil_mdrun)
 
     return equil_gro, equil_tpr
