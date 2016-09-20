@@ -1,4 +1,4 @@
-# MD_Pipeline
+# MD_Pipeline v 1.0
 
 md_pipeline.py is a beta testing version of the python script to streamline and 
 automise coarse grained simulations of membrane-protein systems.
