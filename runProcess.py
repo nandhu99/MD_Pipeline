@@ -5,12 +5,11 @@ import preprocess
 import protein_dimensions
 
 
-def runPreProcess(all_flags):
+def runMemembed(all_flags):
     """
-    This function calls the preprocess to make a clean pdb file
-    It also generates a dssp file
-    :param orient_protein: protein from runMemembed function
-    :return: a clean pdb file & a dssp file
+    This function runs memembed program to orient protein in a membrane environment.
+    :param all_flags: preprocess parameters read from 'config.txt'
+    :return: returns the protein file that is oriented for a membrane system.
     """
     prot_flag = {}
     for option in all_flags:
@@ -22,21 +21,6 @@ def runPreProcess(all_flags):
                     prot_flag[t[0]] = t[1]
                 else:
                     pass
-
-    in_protein = prot_flag['-protein']
-    chain = prot_flag['-nos_chain']
-
-    base_dir = os.path.dirname(os.path.abspath(sys.argv[0]))
-    clean_pdb = preprocess.pdbpqr(base_dir, in_protein, chain)
-    return clean_pdb
-
-
-def runMemembed(clean_pdb, all_flags):
-    """
-    This function runs memembed program to orient protein in a membrane environment.
-    :param all_flags: preprocess parameters read from 'config.txt'
-    :return: returns the protein file that is oriented for a membrane system.
-    """
 
     mem_flags = {}
     for option in all_flags:
@@ -55,19 +39,29 @@ def runMemembed(clean_pdb, all_flags):
     for key in mem_flags:
         memembed_flags = memembed_flags + ' ' + key + ' ' + mem_flags[key]
 
-    orient_protein = clean_pdb[:-10] + '_orient.pdb'
+    in_protein = prot_flag['-protein']
+    orient_protein = in_protein[:-4] + '_orient.pdb'
 
-    memembed_flags = memembed_flags + ' -o ' + orient_protein + ' ' + clean_pdb
+    memembed_flags = memembed_flags + ' -o ' + orient_protein + ' ' + in_protein
     run_memembed = './memembed ' + memembed_flags
     os.system(run_memembed)
-
-    processed_pdb = clean_pdb[:-10] + '_proc.pdb'
-    sep_chains = preprocess.sep_chains(orient_protein, processed_pdb)
-    dssp_file = preprocess.runDSSP(processed_pdb)
-    return sep_chains, processed_pdb, dssp_file
+    return orient_protein
 
 
-def runMaritinize(all_flags, processed_pdb, dssp_file):
+def runPreProcess(orient_protein):
+    """
+    This function calls the preprocess to make a clean pdb file
+    It also generates a dssp file
+    :param orient_protein: protein from runMemembed function
+    :return: a clean pdb file & a dssp file
+    """
+    base_dir = os.path.dirname(os.path.abspath(sys.argv[0]))
+    clean_pdb = preprocess.pdbpqr(base_dir, orient_protein)
+    dssp_file = preprocess.runDSSP(orient_protein)
+    return clean_pdb, dssp_file
+
+
+def runMaritinize(all_flags, clean_pdb, dssp_file):
     """
     This function runs martinize to convert atomistic protein to coarse-grained protein
     :param all_flags: martinize parameters read from 'config.txt'
@@ -92,14 +86,13 @@ def runMaritinize(all_flags, processed_pdb, dssp_file):
     for key in mar_flags:
         martinize_flags = martinize_flags + ' ' + key + ' ' + mar_flags[key]
 
-    cg_protein = processed_pdb[:-9] + '_CG.pdb'
-    cg_topol = processed_pdb[:-9] + '_CG.top'
-    cg_index = processed_pdb[:-9] + '_CG.ndx'
-    nmap = processed_pdb[:-9] + '_map.ndx'
+    cg_protein = clean_pdb[:-4] + '_CG.pdb'
+    cg_topol = clean_pdb[:-4] + '_CG.top'
+    cg_index = clean_pdb[:-4] + '_CG.ndx'
+    nmap = clean_pdb[:-4] + '_map.ndx'
 
-    martinize_flags = martinize_flags + ' -f ' + processed_pdb + ' -ss ' + dssp_file + ' -x ' + cg_protein + ' -o ' + cg_topol + ' -n ' + cg_index + ' -nmap ' + nmap
-    run_martinize = 'python martinize_TW.py ' + martinize_flags
-    print run_martinize
+    martinize_flags = martinize_flags + ' -f ' + clean_pdb + ' -dssp ./dssp' + ' -x ' + cg_protein + ' -o ' + cg_topol + ' -n ' + cg_index + ' -nmap ' + nmap
+    run_martinize = 'python martinize.py ' + martinize_flags
     os.system(run_martinize)
     return cg_protein, cg_topol, cg_index, nmap
 
@@ -235,7 +228,7 @@ def make_topology(clean_pdb, cg_topol, system_top, total_prot):
     :param total_prot: total number of protein copies
     :return: Final topology file with correct itp files and number of molecules
     """
-    first_lines = '#include "martini_v2.2.itp" \n#include "martini_v2.0_lipids.itp" \n#include "martini_v2.0_ions.itp"\n'
+    first_lines = '#include "martini_v2.2.itp" \n#include "martini_v2.2_aminoacids.itp" \n#include "martini_v2.0_lipids.itp" \n#include "martini_v2.0_ions.itp"\n '
 
     with open(cg_topol) as fin:
         cg_lines = fin.readlines()
@@ -247,7 +240,7 @@ def make_topology(clean_pdb, cg_topol, system_top, total_prot):
         elif 'number' in cg_lines[i]:
             new_cg_lines.append(cg_lines[i])
             for j in range(i + 1, len(cg_lines)):
-                if 'Protein_' in cg_lines[j]:
+                if 'Protein' in cg_lines[j]:
                     prot_line = cg_lines[j].split()
                     prot_line[-1] = total_prot
                     prot_line = prot_line[0] + "   " + str(prot_line[1]) + '\n'
@@ -309,7 +302,7 @@ def runMinimization(all_flags, system, topology, system_ndx):
     run_em_grompp = 'gmx grompp -f ' + em_mdp + ' -c ' + system + ' -p ' + topology + ' -n ' + system_ndx + ' -o ' + em_tpr + ' -maxwarn 1'
     os.system(run_em_grompp)
     run_em_mdrun = 'gmx mdrun -ntmpi 1 -ntomp 4  -s ' + em_tpr + ' -v -deffnm ' + system[:-4] + '_EM'
-    # os.system(run_em_mdrun)
+    os.system(run_em_mdrun)
 
     return em_gro, em_tpr
 
@@ -359,8 +352,8 @@ def runEquilibration(all_flags, system, em_gro, topology, system_ndx):
     equil_tpr = system[:-4] + '_EQUIL.tpr'
 
     run_equil_grompp = 'gmx grompp -f ' + equil_mdp + ' -c ' + em_gro + ' -p ' + topology + ' -n ' + system_ndx + ' -o ' + equil_tpr + ' -maxwarn 10'
-    # os.system(run_equil_grompp)
+    os.system(run_equil_grompp)
     run_equil_mdrun = 'gmx mdrun -ntmpi 1 -ntomp 4  -s ' + equil_tpr + ' -v -deffnm ' + system[:-4] + '_EQUIL'
-    # os.system(run_equil_mdrun)
+    os.system(run_equil_mdrun)
 
     return equil_gro, equil_tpr

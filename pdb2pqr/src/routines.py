@@ -62,6 +62,8 @@ AAS = ["ALA", "ARG", "ASH", "ASN", "ASP", "CYS", "CYM", "GLN", "GLU", "GLH", "GL
 NAS = ["A", "A5", "A3", "C", "C5", "C3", "G", "G5", "G3", "T", "T5", "T3", "U", \
        "U5", "U3", "RA", "RG", "RC", "RU", "DA", "DG", "DC", "DT"]
 
+from StringIO import StringIO
+
 from definitions import *
 from errors import PDBInputError, PDBInternalError
 

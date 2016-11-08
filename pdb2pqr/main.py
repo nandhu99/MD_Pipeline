@@ -57,7 +57,6 @@ from src.errors import PDB2PQRError
 from src.forcefield import *
 from src.hydrogens import *
 from src.protein import *
-from src.structures import *
 
 __version__ = PDB2PQR_VERSION
 
