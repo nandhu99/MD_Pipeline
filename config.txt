@@ -3,8 +3,9 @@
 ###########################
 
 # Give a PDB file for orienting/processing/cleaning (mandatory)
--protein = protein.pdb
-
+-protein = 3kvn.pdb
+# number protein chains in the pdb file
+-nos_chain = 1
 
 ###########################
 #end_preprocess_options
@@ -24,11 +25,11 @@
 # Threads to use
 -a = 1
 # Search type. 0 = Genetic algorithm, 1 = Grid, 2 = Direct, 3 = GA repeated 5 times. (Default 0)
--s = 3
+-s = 0
 # Optimise membrane thickness. 0 = Do not optimise, 1 = After orientation, 2 = Do not orientate. (Default 0)
 ;-q =
 # Location of N-terminal (first residue of first chain)(in | out)
--n = out
+-n = in
 # Target is a beta-barrel
 ;-b = True
 # Force target to span membrane
@@ -96,17 +97,17 @@
 # Use dihedrals for extended regions rather than elastic bonds (Default: False)
 ;-ed = False
 # Write separate topologies for identical chains
-;-sep = False
+;-sep = True
 
 
 ### other elastic network options are chosen True when "-elastic" is used. Uses all default values ###
 
 # Elastic bond force constant Fc (default: 500 kJ/mol/nm^2)
-;-ef = 500
+-ef = 500
 # Elastic bond lower cutoff: F = Fc if rij < lo
-;-el = 0.5
+-el = 0.5
 # Elastic bond upper cutoff: F = 0  if rij > up
-;-eu = 0.9
+-eu = 0.9
 # Elastic bond decay factor a (default: 0)
 ;-ea  = 0
 # Elastic bond decay power p (default: 0)
@@ -146,7 +147,7 @@
 ###  Periodic boundary conditions  ###
 
 # PBC type: hexagonal, rectangular, square, cubic, optimal or keep
--pbc = square
+-pbc = cubic
 # X dimension or first lattice vector of system (nm)
 -x = 30
 # Y dimension or first lattice vector of system (nm)
@@ -162,9 +163,9 @@
 ###  Membrane/lipid related options  ###
 
 # Lipid type and relative abundance (NAME[:#]) (use multiple -l to define different lipid mixtures)
--l = DPPC:50 POPC:50
+-l = POPC:75 CHOL:25
 Lipid type and relative abundance (NAME[:#]) (use multiple -u to define different lipid mixtures)
--u = DPPC:50 POPC:50
+-u = POPC:75 CHOL:25
 
 # Area per lipid (nm*nm)
 ;-a =

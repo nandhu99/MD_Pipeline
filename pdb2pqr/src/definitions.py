@@ -52,6 +52,7 @@ PATCHPATH = "dat/PATCHES.xml"
 
 from routines import *
 
+
 class DefinitionHandler(sax.ContentHandler):
    
     def __init__(self):
