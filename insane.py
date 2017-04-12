@@ -48,8 +48,8 @@ lipidsa.update({  # 1   2   3   4   5   6   7   8   9  10  11  12  13  14  15  1
     "DOPE": (moltype, " -   -   -  NH3  -  PO4 GL1 GL2 C1A D2A C3A C4A  -   -  C1B D2B C3B C4B  -   - "),
     "POPG": (moltype, " -   -   -  GL0  -  PO4 GL1 GL2 C1A D2A C3A C4A  -   -  C1B C2B C3B C4B  -   - "),
     "DOPG": (moltype, " -   -   -  GL0  -  PO4 GL1 GL2 C1A D2A C3A C4A  -   -  C1B D2B C3B C4B  -   - "),
-    "POPS": (moltype, " -   -   -  CN0  -  PO4 GL1 GL2 C1A D2A C3A C4A  -   -  C1B C2B C3B C4B  -   - "),
-    "DOPS": (moltype, " -   -   -  CN0  -  PO4 GL1 GL2 C1A D2A C3A C4A  -   -  C1B D2B C3B C4B  -   - "),
+    "POPS": (moltype, " -   -   -  CNO  -  PO4 GL1 GL2 C1A D2A C3A C4A  -   -  C1B C2B C3B C4B  -   - "),
+    "DOPS": (moltype, " -   -   -  CNO  -  PO4 GL1 GL2 C1A D2A C3A C4A  -   -  C1B D2B C3B C4B  -   - "),
     "DPSM": (moltype, " -   -   -  NC3  -  PO4 AM1 AM2 T1A C2A C3A  -   -   -  C1B C2B C3B C4B  -   - "),
     "DBSM": (moltype, " -   -   -  NC3  -  PO4 AM1 AM2 T1A C2A C3A C4A  -   -  C1B C2B C3B C4B C5B  - "),
     "BNSM": (moltype, " -   -   -  NC3  -  PO4 AM1 AM2 T1A C2A C3A C4A  -   -  C1B C2B C3B C4B C5B C6B"),
@@ -78,8 +78,8 @@ lipidsa.update({  # 1   2   3   4   5   6   7   8   9  10  11  12  13  14  15  1
     "PPCS.o": (moltype, " -   -   -  NC3  -  PO4 AM1 AM2 C1A C2A C3A C4A  -   -  D1B C2B C3B C4B  -   - "),
     "DOPG.o": (moltype, " -   -   -  GL0  -  PO4 GL1 GL2 C1A C2A D3A C4A C5A  -  C1B C2B D3B C4B C5B  - "),
     "POPG.o": (moltype, " -   -   -  GL0  -  PO4 GL1 GL2 C1A C2A C3A C4A  -   -  C1B C2B D3B C4B C5B  - "),
-    "DOPS.o": (moltype, " -   -   -  CN0  -  PO4 GL1 GL2 C1A C2A D3A C4A C5A  -  C1B C2B D3B C4B C5B  - "),
-    "POPS.o": (moltype, " -   -   -  CN0  -  PO4 GL1 GL2 C1A C2A C3A C4A  -   -  C1B C2B D3B C4B C5B  - "),
+    "DOPS.o": (moltype, " -   -   -  CNO  -  PO4 GL1 GL2 C1A C2A D3A C4A C5A  -  C1B C2B D3B C4B C5B  - "),
+    "POPS.o": (moltype, " -   -   -  CNO  -  PO4 GL1 GL2 C1A C2A C3A C4A  -   -  C1B C2B D3B C4B C5B  - "),
     "CPG.o": (moltype, " -   -   -  GL0  -  PO4 GL1 GL2 C1A C2A C3A C4A  -   -  C1B C2B D3B C4B  -   - "),
     "PPG.o": (moltype, " -   -   -  GL0  -  PO4 GL1 GL2 C1A C2A C3A C4A  -   -  D1B C2B C3B C4B  -   - "),
     "PPT.o": (moltype, " -   -   -  GL0  -  PO4 GL1 GL2 C1A D2A D3A D4A  -   -  D1B C2B C3B C4B  -   - "),
@@ -103,15 +103,15 @@ lipidsz[moltype] = (8, 9, 9, 7, 10, 10, 10, 6, 6, 5, 4, 3, 2, 1, 0, 5, 4, 3, 2, 
 lipidsa.update(
     {  # 1     2    3    4    5   6   7   8    9    10    11    12    13    14   15    16    17    18    19   20
         "DPPI": (moltype,
-                 " C1   C2   C3    CP   -   -   -  GL1  GL2  C1A  C2A  C3A  C4A   -    -   C1B  C2B  C3B  C4B   -    - "),
+                 " C1   C2   C3    PO4   -   -   -  GL1  GL2  C1A  C2A  C3A  C4A   -    -   C1B  C2B  C3B  C4B   -    - "),
         "POPI": (moltype,
-                 " C1   C2   C3    CP   -   -   -  GL1  GL2  C1A  D2A  C3A  C4A   -    -   C1B  C2B  C3B  C4B   -    - "),
+                 " C1   C2   C3    PO4   -   -   -  GL1  GL2  C1A  D2A  C3A  C4A   -    -   C1B  C2B  C3B  C4B   -    - "),
         "PIPI": (moltype,
-                 " C1   C2   C3    CP   -   -   -  GL1  GL2  C1A  D2A  D3A  C4A   -    -   C1B  C2B  C3B  C4B   -    - "),
+                 " C1   C2   C3    PO4   -   -   -  GL1  GL2  C1A  D2A  D3A  C4A   -    -   C1B  C2B  C3B  C4B   -    - "),
         "PAPI": (moltype,
-                 " C1   C2   C3    CP   -   -   -  GL1  GL2  D1A  D2A  D3A  D4A  C5A   -   C1B  C2B  C3B  C4B   -    - "),
+                 " C1   C2   C3    PO4   -   -   -  GL1  GL2  D1A  D2A  D3A  D4A  C5A   -   C1B  C2B  C3B  C4B   -    - "),
         "PUPI": (moltype,
-                 " C1   C2   C3    CP   -   -   -  GL1  GL2  D1A  D2A  D3A  D4A  D5A   -   C1B  C2B  C3B  C4B   -    - "),
+                 " C1   C2   C3    PO4   -   -   -  GL1  GL2  D1A  D2A  D3A  D4A  D5A   -   C1B  C2B  C3B  C4B   -    - "),
         "POP1": (moltype,
                  " C1   C2   C3    CP  P1   -   -  GL1  GL2  C1A  C2A  D3A  C4A   -    -   C1B  C2B  C3B  C4B   -    - "),
         "POP2": (moltype,
@@ -198,7 +198,7 @@ lipidsa.update({
     "GCER.o": (moltype,
                " C1   C2   C3    -    -   -   -   -   -     -     -     -     -     -    -     -     -   AM1   AM2  C1A  C2A  C3A  C4A   -   C1B  C2B  C3B  C4B   - "),
     "DPPI.o": (moltype,
-               " C1   C2   C3    -   CP   -   -   -   -     -     -     -     -     -    -     -     -   GL1   GL2  C1A  C2A  C3A  C4A   -   C1B  C2B  C3B  C4B   - "),
+               " C1   C2   C3    -   PO4   -   -   -   -     -     -     -     -     -    -     -     -   GL1   GL2  C1A  C2A  C3A  C4A   -   C1B  C2B  C3B  C4B   - "),
 })
 
 moltype = "QUINONES"
@@ -297,7 +297,7 @@ lipidsa.update({
 })
 
 # Lists for automatic charge determination
-charges = {"ARG": 1, "LYS": 1, "ASP": -1, "GLU": -1, "DOPG": -1, "POPG": -1, "DOPS": -1, "POPS": -1, "DSSQ": -1}
+charges = {"ARG": 1, "LYS": 1, "ASP": -1, "GLU": -1, "DOPG": -1, "POPG": -1, "DOPS": -1, "POPS": -1, "DSSQ": -1, "POPI": -1, "PAPS": -1, "SAPI": -1}
 
 a, b = math.sqrt(2) / 20, math.sqrt(2) / 60
 ct, st = math.cos(math.pi * 109.47 / 180), math.sin(math.pi * 109.47 / 180)  # Tetrahedral
@@ -677,7 +677,7 @@ lipL = []
 lipU = []
 solv = []
 
-# HII edit - lipid definition, for extra lipid definitaions
+# HII edit - lipid definition, for extra lipid definitions
 usrmols = []
 usrheads = []
 usrlinks = []
@@ -688,8 +688,12 @@ usrLipHeadMapp = {  # Define supported lipid head beads. One letter name mapped 
     "G": ('GL0'),  # GL0 = Glycerol
     "S": ('CNO'),  # CNO = Serine
     "P": ('PO4'),  # PO4 = Phosphate
-    "O": ('PO4')  # PO4 = Phosphate acid
+    "O": ('PO4'),  # PO4 = Phosphate acid
+    "I1": ('C1'),  # P1  = Inositol part 1   - bead P1, charge  0
+    "I2": ('C2'),  # P4  = Inositol part 2   - bead P4, charge  0
+    "I3": ('C3'),  # P4  = Inositol part 3   - bead P4, charge  0
 }
+
 usrIndexToLetter = "A B C D E F G H I J K L M N".split()  # For naming lipid tail beads
 
 # Description

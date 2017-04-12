@@ -3,7 +3,7 @@
 ###########################
 
 # Give a PDB file for orienting/processing/cleaning (mandatory)
--protein = protein.pdb
+-protein = 5bnq.pdb
 
 
 ###########################
@@ -24,7 +24,7 @@
 # Threads to use
 -a = 1
 # Search type. 0 = Genetic algorithm, 1 = Grid, 2 = Direct, 3 = GA repeated 5 times. (Default 0)
--s = 3
+-s = 0
 # Optimise membrane thickness. 0 = Do not optimise, 1 = After orientation, 2 = Do not orientate. (Default 0)
 ;-q =
 # Location of N-terminal (first residue of first chain)(in | out)
@@ -162,9 +162,9 @@
 ###  Membrane/lipid related options  ###
 
 # Lipid type and relative abundance (NAME[:#]) (use multiple -l to define different lipid mixtures)
--l = DPPC:50 POPC:50
+-l = PIPC:8 POPC:8 PAPE:7.2 POPE:4.8 POPS:1.8 PAPS:1.2 SAPI:18 POPI:1.2 DPSM:0.5 PNSM:0.5 CHOL:15
 Lipid type and relative abundance (NAME[:#]) (use multiple -u to define different lipid mixtures)
--u = DPPC:50 POPC:50
+-u = PIPC:9 POPC:9 PAPE:5.6 POPE:2.4 DPSM:6 PNSM:3 CHOL:15
 
 # Area per lipid (nm*nm)
 ;-a =
@@ -229,16 +229,20 @@ Lipid type and relative abundance (NAME[:#]) (use multiple -u to define differen
 -charge = auto
 
 
-###  Define additional lipid types (same format as in lipid-martini-itp-v01.py)  ###
+### Define additional lipid types (same format as in lipid-martini-itp-v01.py)  ###
+### add lipids in a comma separated manner if you want to add multiple new lipids to the insane script ###
+### conventional lipid tail-1 is tail-2 in CG and vise versa for most lipids except for SM lipids ###
+### eg: POPC --> Palmitoyl is tail-2 and Oleoyl is tail-1 according to CG martini mapping ###
 
 # Additional lipid name, x4 letter
-;-alname =
+-alname = PIPC, PAPE, PAPS, SAPI, PNSM
 # Additional lipid head specification string
-;-alhead =
+-alhead = "C P", "E P",  "S P",  "I1 I2 I3 P" , "C P"
 # Additional lipid linker specification string
-;-allink =
+-allink = "G G", "G G", "G G", "G G", "A A"
 # Additional lipid tail specification string
-;-altail =
+-altail = "CDDC CCCC", "DDDDC CCCC", "DDDDC CCCC", "DDDDC CCCC", "TCC CCCDCC"
+
 
 ###########################
 #end_insane_options

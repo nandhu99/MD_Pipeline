@@ -1,0 +1,38 @@
+; MARTINI (martini22) Coarse Grained topology file for "Protein"
+; Created by py version 2.5 
+
+[ moleculetype ]
+; Name         Exclusions
+CYSP           1
+
+[ atoms ]
+    1    P5     3   CYSP   BB     1  0.0000 ; E
+    2    C5     3   CYSP  SC1     2  0.0000 ; E
+    3    C1     3   CYSP   C1     3  0.0000
+    4    C1     3   CYSP   C2     4  0.0000
+    5    C1     3   CYSP   C3     5  0.0000
+    6    C1     3   CYSP   C4     6  0.0000 
+
+[ bonds ]
+; Sidechain bonds
+    1     2      1   0.38000  8000 ; CYSP
+    2     3      1   0.41000  5500 ; CYSP
+    3     4      1   0.48000  4500 ; CYSP
+    4     5      1   0.48000  4500 ; CYSP
+    5     6      1   0.41000  5500 ; CYSP
+
+
+
+[ angles ]
+; Sidechain angles
+    1     2     3      2    170    53 ; CYSP
+    2     3     4      2    140    32 ; CYSP
+    3     4     5      2    160    45 ; CYSP
+    4     5     6      2    165    38 ; CYSP
+
+
+
+
+#ifdef DPOSRES
+#include "posre.itp"
+#endif

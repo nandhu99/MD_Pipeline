@@ -43,10 +43,15 @@
     ----------------------------
 """
 
-import topology
+import os
+import string
+import math
+
 from definitions import *
+from utilities import *
 from quatfit import *
 from routines import *
+import topology
 
 __date__ = "22 April 2009"
 __author__ = "Todd Dolinsky, Jens Erik Nielsen, Yong Huang"

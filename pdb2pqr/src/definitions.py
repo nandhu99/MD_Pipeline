@@ -50,6 +50,13 @@ AAPATH = "dat/AA.xml"
 NAPATH = "dat/NA.xml"
 PATCHPATH = "dat/PATCHES.xml"
 
+import os
+import copy
+import re
+from xml import sax
+from pdb import *
+from utilities import *
+from structures import *
 from routines import *
 
 

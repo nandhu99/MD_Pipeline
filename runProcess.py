@@ -119,8 +119,6 @@ def multiplyProtein(all_flags, cg_protein):
         else:
             pass
 
-    protein_box = [x_dim, y_dim, z_dim]
-
     multi_flags = {}
     for option in all_flags:
         if option[0] == 'multiProt_options':
@@ -183,6 +181,7 @@ def runInsane(all_flags, clean_pdb, multi_prot):
 
     insane_flags = ''
     lipids = []
+    arb_lipids = []
     for key in sane_flags:
         if key == '-l' or key == '-u':
             luflags = sane_flags[key].split()
@@ -190,6 +189,12 @@ def runInsane(all_flags, clean_pdb, multi_prot):
                 if luflag not in lipids:
                     lipids.append(luflag)
                 insane_flags = insane_flags + ' ' + key + ' ' + luflag
+        elif key == '-alhead' or key == '-allink' or key == '-alname' or key == '-altail':
+            arbflags = sane_flags[key].split(",")
+            for arlflag in arbflags:
+                if arlflag not in arb_lipids:
+                    arb_lipids.append(arlflag)
+                insane_flags = insane_flags + ' ' + key + ' ' + arlflag
         else:
             insane_flags = insane_flags + ' ' + key + ' ' + sane_flags[key]
 
@@ -217,6 +222,36 @@ def make_ndx(system, lipids):
     index = 'gmx make_ndx -f ' + system + ' -o ' + system_ndx + ' <<EOF\n 1 | r ' + ndx_flags + ' \n 11  &  !  r ' + ndx_flags + ' \n  q \n EOF'
     os.system(index)
     return system_ndx
+
+
+def merge_redundant(redundant):
+    """
+
+    :param redundant:
+    :return:
+    """
+    import collections
+
+    non_redundant = collections.defaultdict(list)
+    keep_order = []
+    for entry in redundant:
+        tentry = entry.split()
+        non_redundant[tentry[0]].append(int(tentry[1]))
+        if tentry[0] in keep_order:
+            pass
+        else:
+            keep_order.append(tentry[0])
+
+    new_array = []
+    for entry in keep_order:
+        temp = 0
+        temp_str = ''
+        for tentry in non_redundant[entry]:
+            temp = temp + tentry
+        temp_str = entry + "\t" + str(temp) + '\n'
+        new_array.append(temp_str)
+
+    return new_array
 
 
 def make_topology(clean_pdb, cg_topol, system_top, total_prot):
@@ -258,7 +293,7 @@ def make_topology(clean_pdb, cg_topol, system_top, total_prot):
             for j in range(start, len(sys_lines)):
                 new_sys_lines.append(sys_lines[j])
             break
-
+    # new_sys_lines = merge_redundant(new_sys_lines)
     topology = clean_pdb[:-4] + '.top'
     with open(topology, 'w') as fout:
         fout.write(first_lines)
@@ -302,7 +337,7 @@ def runMinimization(all_flags, system, topology, system_ndx):
     run_em_grompp = 'gmx grompp -f ' + em_mdp + ' -c ' + system + ' -p ' + topology + ' -n ' + system_ndx + ' -o ' + em_tpr + ' -maxwarn 1'
     os.system(run_em_grompp)
     run_em_mdrun = 'gmx mdrun -ntmpi 1 -ntomp 4  -s ' + em_tpr + ' -v -deffnm ' + system[:-4] + '_EM'
-    os.system(run_em_mdrun)
+    # os.system(run_em_mdrun)
 
     return em_gro, em_tpr
 
@@ -352,8 +387,8 @@ def runEquilibration(all_flags, system, em_gro, topology, system_ndx):
     equil_tpr = system[:-4] + '_EQUIL.tpr'
 
     run_equil_grompp = 'gmx grompp -f ' + equil_mdp + ' -c ' + em_gro + ' -p ' + topology + ' -n ' + system_ndx + ' -o ' + equil_tpr + ' -maxwarn 10'
-    os.system(run_equil_grompp)
+    # os.system(run_equil_grompp)
     run_equil_mdrun = 'gmx mdrun -ntmpi 1 -ntomp 4  -s ' + equil_tpr + ' -v -deffnm ' + system[:-4] + '_EQUIL'
-    os.system(run_equil_mdrun)
+    # os.system(run_equil_mdrun)
 
     return equil_gro, equil_tpr

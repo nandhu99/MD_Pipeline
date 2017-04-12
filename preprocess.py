@@ -177,25 +177,16 @@ def pdbpqr(base_dir, pdb):
     pdb_prefix = pdb[:-11]
 
     genout = pdb_prefix + "_pgen.pdb"
-    pqr = pdb_prefix + "_pmin.pqr"
     gromos_pdb = pdb_prefix + "_clean.pdb"
     outmol = pdb_prefix + "_pmin.mol.pdb"
-    #outmol2 = pdb_prefix + "_pmin.mol2.pdb"
 
     fix_missing_BB(pdb, genout)
-    #  with open('error_log', 'a') as err_out, open('output_log', 'a') as out_f:
     run_pdb2pqr = base_dir + '/pdb2pqr/pdb2pqr.py --nodebump --noopt --chain --ff=GROMOS --ffout=GROMOS ' + genout + ' ' + outmol
-    # subprocess.call([base_dir + '/pdb2pqr/pdb2pqr.py', '--nodebump', '--noopt', '--mol_charmm_pdb', '--chain', '--ff=GROMOS', '--ffout=GROMOS', genout, pqr], stdout=out_f, stderr=err_out)
     os.system(run_pdb2pqr)
     fix_ILE(outmol, gromos_pdb)
-    #residues(outmol2, gromos_pdb)
 
-    #os.unlink(genout)
-    #os.unlink(pqr)
-    #os.unlink(outmol)
-    #os.unlink(outmol2)
-    #  os.unlink('error_log')
-    # os.unlink('output_log')
+    os.unlink(genout)
+    os.unlink(outmol)
     return gromos_pdb
 
 

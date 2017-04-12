@@ -1,0 +1,67 @@
+;;;;;; Martini lipid topology for POPC, generated using:
+; The Martini lipid itp generator version 0.5  Args are: -o Martini-lipid.itp -alname SAPI -alhead 'I1 I2 I3 P' -allink 'G G' -altail 'CCCC DDDDC'
+; WARNING: Lipids topology was generated following the Martini 2.0 guidelines but this specific lipid type might
+;          not have been tested and should therefore be used with care. 
+;
+; Description:
+;   This is a ...
+; Parameterization:
+;   Was modeled on ...
+;
+;@INSANE alhead=I1 I2 I3 P, allink=G G, altail=CCCC DDDDC, alname=SAPI, charge=-1.0
+;@RESNTEST SAP==SAPI if: atoms[0]==C1
+;@BEADS C1 C2 C3 PO4 GL1 GL2 C1A C2A C3A C4A D1B D2B D3B D4B C5B 
+;@BONDS C1-C2 C2-C3 C3-PO4 PO4-GL1 GL1-GL2 GL1-C1A C1A-C2A C2A-C3A C3A-C4A GL2-D1B D1B-D2B D2B-D3B D3B-D4B D4B-C5B 
+;
+
+[moleculetype]
+; molname      nrexcl
+  SAPI          1
+
+[atoms]
+; id 	type 	resnr 	residu 	atom 	cgnr 	charge
+   1 	P1 	 1 	SAPI 	C1 	 1 	0.0 	
+   2 	P4 	 1 	SAPI 	C2 	 2 	0.0 	
+   3 	P4 	 1 	SAPI 	C3 	 3 	0.0 	
+   4 	Qa 	 1 	SAPI 	PO4 	 4 	-1.0 	
+   5 	Na 	 1 	SAPI 	GL1 	 5 	0 	
+   6 	Na 	 1 	SAPI 	GL2 	 6 	0 	
+   7 	C1 	 1 	SAPI 	C1A 	 7 	0 	
+   8 	C1 	 1 	SAPI 	C2A 	 8 	0 	
+   9 	C1 	 1 	SAPI 	C3A 	 9 	0 	
+  10 	C1 	 1 	SAPI 	C4A 	10 	0 	
+  11 	C4 	 1 	SAPI 	D1B 	11 	0 	
+  12 	C4 	 1 	SAPI 	D2B 	12 	0 	
+  13 	C4 	 1 	SAPI 	D3B 	13 	0 	
+  14 	C4 	 1 	SAPI 	D4B 	14 	0 	
+  15 	C1 	 1 	SAPI 	C5B 	15 	0 	
+
+[bonds]
+;  i  j 	funct 	length 	force.c.
+   1  2 	1 	0.47 	1250 	
+   2  3 	1 	0.47 	1250 	
+   3  4 	1 	0.47 	1250 	
+   4  5 	1 	0.47 	1250 	
+   5  6 	1 	0.37 	1250 	
+   5  7 	1 	0.47 	1250 	
+   7  8 	1 	0.47 	1250 	
+   8  9 	1 	0.47 	1250 	
+   9 10 	1 	0.47 	1250 	
+   6 11 	1 	0.47 	1250 	
+  11 12 	1 	0.47 	1250 	
+  12 13 	1 	0.47 	1250 	
+  13 14 	1 	0.47 	1250 	
+  14 15 	1 	0.47 	1250 	
+
+[angles]
+;  i  j  k 	funct 	angle 	force.c.
+   4  5  6 	2 	120.0 	25.0 	
+   4  5  7 	2 	180.0 	25.0 	
+   5  7  8 	2 	180.0 	25.0 	
+   7  8  9 	2 	180.0 	25.0 	
+   8  9 10 	2 	180.0 	25.0 	
+   6 11 12 	2 	100.0 	10.0 	
+  11 12 13 	2 	100.0 	10.0 	
+  12 13 14 	2 	100.0 	10.0 	
+  13 14 15 	2 	120.0 	45.0 	
+

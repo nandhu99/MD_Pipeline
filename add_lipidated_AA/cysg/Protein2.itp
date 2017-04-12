@@ -1,0 +1,37 @@
+; Created by py version 2.5 
+
+[ moleculetype ]
+; Name         Exclusions
+CYSG           1
+
+[ atoms ]
+    1    P5     3   CYSG   BB     1  0.0000 ; E
+    2    C5     3   CYSG  SC1     2  0.0000 ; E
+    3    C3     3   CYSG   C1     3  0.0000
+    4    C3     3   CYSG   C2     4  0.0000
+    5    C3     3   CYSG   C3     5  0.0000
+    6    C3     3   CYSG   C4     6  0.0000 
+    7    C3     3   CYSG   C5     7  0.0000
+
+[ bonds ]
+; Sidechain bonds
+    1     2      1   0.37000  8500 ; CYSG
+    2     3      1   0.41000  5500 ; CYSG
+    3     4      1   0.42000  7750 ; CYSG
+    4     5      1   0.41000  7000 ; CYSG
+    5     6      1   0.41000  15000 ; CYSG
+    6     7      1   0.24000  15000 ' CYSG
+
+[ angles ]
+; Sidechain angles
+    1     2     3      2     65    50 ; CYSG
+    2     3     4      2    130    55 ; CYSG
+    3     4     5      2    135    45 ; CYSG
+    4     5     6      2    170    38 ; CYSG
+    5     6     7      2    170    45 ; CYSG
+
+
+
+#ifdef DPOSRES
+#include "posre.itp"
+#endif
