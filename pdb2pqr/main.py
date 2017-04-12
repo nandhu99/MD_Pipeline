@@ -47,16 +47,30 @@
 __date__ = "15 Aug 2016"
 __author__ = "Modified by Nandhitha Subramanian"
 
-import time
-from StringIO import *
+import string
+import sys
+import getopt
 from optparse import OptionParser, OptionGroup
-
+import os
+import time
+import copy
+from src import pdb
 from src import utilities
-from src.aconf import *
-from src.errors import PDB2PQRError
+from src import structures
+from src import routines
+from src import protein
+from src.pdb import *
+from src.utilities import *
+from src.structures import *
+from src.definitions import *
 from src.forcefield import *
-from src.hydrogens import *
+from src.routines import *
 from src.protein import *
+from src.server import *
+from src.hydrogens import *
+from src.aconf import *
+from StringIO import *
+from src.errors import PDB2PQRError
 
 __version__ = PDB2PQR_VERSION
 
