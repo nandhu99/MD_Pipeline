@@ -2,7 +2,7 @@
 #preprocess_options
 ###########################
 ###
-#  This is an example input file. Use your own options #
+##  This is an example input file. Use your own options ##
 ###
 
 # Give a PDB file for orienting/processing/cleaning (mandatory)
