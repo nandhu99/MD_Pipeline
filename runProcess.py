@@ -93,6 +93,7 @@ def runMaritinize(all_flags, clean_pdb, dssp_file):
 
     martinize_flags = martinize_flags + ' -f ' + clean_pdb + ' -dssp ./dssp' + ' -x ' + cg_protein + ' -o ' + cg_topol + ' -n ' + cg_index + ' -nmap ' + nmap
     run_martinize = 'python martinize.py ' + martinize_flags
+    """ Use martinize-2.6.py for lipidated amino acids"""
     os.system(run_martinize)
     return cg_protein, cg_topol, cg_index, nmap
 

@@ -1,6 +1,9 @@
 ###########################
 #preprocess_options
 ###########################
+###
+#  This is an example input file. Use your own options #
+###
 
 # Give a PDB file for orienting/processing/cleaning (mandatory)
 -protein = 5bnq.pdb
@@ -254,6 +257,7 @@ Lipid type and relative abundance (NAME[:#]) (use multiple -u to define differen
 ###########################
 ;
 ; STANDARD EM INPUT OPTIONS FOR MARTINI 2.x AND GROMACS 5.x
+; The mdp options given here is an example one. Use your own options depending on your system and what question you are trying to answer
 
 title            = Martini_EM
 
@@ -342,6 +346,8 @@ lincs_warnangle          = 30
 
 ;
 ; STANDARD MD INPUT OPTIONS FOR MARTINI 2.x for use with GROMACS 5.x
+; The mdp options given here is an example one. Use your own options depending on your system and what question you are trying to answer
+
 
 title                    = Martini md or equilibration
 
